@@ -1,6 +1,11 @@
 var WhiteVertexSource = `
     // TODO: Implement a simple GLSL vertex shader with
     // 1) A mat4 uniform matrix specifying the model-view-projection matrix
+    uniform mat4 ModelViewProjection;
+    attribute vec3 Position;
+    void main() {
+        gl_Position = ModelViewProjection * vec4(Position, 1.0);
+    }
     // 2) A vec3 position attribute
     // 3) A main function that multiplies the projection matrix with
     //    the position, and assigns the result to gl_Position.
@@ -11,6 +16,9 @@ var WhiteFragmentSource = `
     precision highp float;
     
     // TODO: Implement a simgple GLSL fragment shader that assigns a white color to gl_FragColor
+    void main() {
+        gl_FragColor = vec4(1.0);
+    }
 `;
 
 function createVertexBuffer(gl, vertexData) {
@@ -18,25 +26,47 @@ function createVertexBuffer(gl, vertexData) {
     //       copy the array `vertexData` into it
     //       Return the created buffer
     //       Commands you will need: gl.createBuffer, gl.bindBuffer, gl.bufferData
+    var vertbuf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertbuf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexData), gl.STATIC_DRAW);
+    return vertbuf;
 }
 function createIndexBuffer(gl, indexData) {
     // TODO: Create a buffer, bind it to the ELEMENT_ARRAY_BUFFER target, and
     //       copy the array `indexData` into it
     //       Return the created buffer
     //       Commands you will need: gl.createBuffer, gl.bindBuffer, gl.bufferData
+    var indbuf = gl.createBuffer();
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indbuf);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indexData), gl.STATIC_DRAW);
+    return indbuf;
 }
 function createShaderObject(gl, shaderSource, shaderType) {
     // TODO: Create a shader of type `shaderType`, submit the source code `shaderSource`,
     //       compile it and return the shader
     //       Commands you will need: gl.createShader, gl.shaderSource, gl.compileShader
+    var fragShader = gl.createShader(shaderType);
+    gl.shaderSource(fragShader, shaderSource);
+    gl.compileShader(fragShader);
+    return fragShader;
+
 }
 function createShaderProgram(gl, vertexSource, fragmentSource) {
-    var   vertexShader = createShaderObject(gl,   vertexSource, gl.  VERTEX_SHADER);
+    var vertexShader = createShaderObject(gl, vertexSource, gl.VERTEX_SHADER);
     var fragmentShader = createShaderObject(gl, fragmentSource, gl.FRAGMENT_SHADER);
     
     // TODO: Create a shader program, attach `vertexShader` and `fragmentShader`
     //       to it, link the program and return the result.
     //       Commands you will need: gl.createProgram, gl.attachShader, gl.linkProgram
+    var shader = gl.createProgram(); 
+    gl.attachShader(shader, vertexShader); 
+    gl.attachShader(shader, fragmentShader); 
+    gl.linkProgram(shader);
+    var err = gl.getShaderInfoLog(fragmentShader);
+    if (err.length > 0) {
+        throw err;
+    }
+    return shader;
 }
 
 var TriangleMesh = function(gl, vertexPositions, indices, vertexSource, fragmentSource) {
@@ -67,6 +97,18 @@ TriangleMesh.prototype.render = function(gl, model, view, projection) {
     //          var matrix = ....
     //          var uniformLocation = ....
     //          gl.uniformMatrix4fv(uniformLocation, false, matrix.transpose().m);
+
+    gl.useProgram(this.shaderProgram);
+    var matrix = (projection.multiply(view)).multiply(model);
+    var location = gl.getUniformLocation(this.shaderProgram, "ModelViewProjection");
+    gl.uniformMatrix4fv(location, false, matrix.transpose().m);
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.positionVbo); 
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indexIbo); 
+    var pos = gl.getAttribLocation(this.shaderProgram,"Position"); 
+    gl.enableVertexAttribArray(pos);
+    gl.vertexAttribPointer(pos, 3, gl.FLOAT, false, 0, 0);
+    gl.drawElements(gl.TRIANGLES, this.indexCount, gl.UNSIGNED_SHORT, 0);
+    
 }
 
 var Task1 = function(gl) {

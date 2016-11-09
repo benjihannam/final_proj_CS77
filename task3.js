@@ -4,7 +4,11 @@ function rotateAroundAxisAtPoint(axis, angle, point) {
     //       Hint: You will need Matrix.translate and Matrix.rotate
     //       Hint: axis and point are arrays. Use axis[0], axis[1], etc.
     //             to get their components
-    return new Matrix();
+
+    var res1 = (Matrix.translate(point[0], point[1], point[2])).inverse();
+    var res2 = Matrix.rotate(angle, axis[0], axis[1], axis[2]);
+    var res3 = (Matrix.translate(point[0], point[1], point[2]));
+    return res3.multiply(res2).multiply(res1);
 }
 
 var Task3 = function(gl) {

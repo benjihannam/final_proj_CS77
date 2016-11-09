@@ -18,13 +18,22 @@ Bone.prototype.computePoseMatrix = function() {
     
     //       If this.parent is not null, you should also apply the pose matrix of the parent
     //       to get a hierarchical transform
-    return new Matrix();
+    var trans = Matrix.translate(this.position[0], this.position[1], this.position[2]);
+    var axis_rotate = rotateAroundAxisAtPoint(this.jointAxis, this.jointAngle, this.jointLocation);
+    var pose_matrix = trans.multiply(axis_rotate);
+    if (this.parent != null) {
+        pose_matrix = (this.parent.computePoseMatrix()).multiply(pose_matrix);
+    }
+    return pose_matrix;
 }
 Bone.prototype.computeModelMatrix = function() {
     // TODO: Compute the model matrix of this bone (i.e. pose matrix + scaling)
     //       and return it.
     //       Use this.computePoseMatrix and this.scale to build the matrix
-    return new Matrix();
+
+    var pose_mat = this.computePoseMatrix();
+    var scale_mat = Matrix.scale(this.scale[0], this.scale[1], this.scale[2]);
+    return pose_mat.multiply(scale_mat);
 }
 
 var Task4 = function(gl) {
