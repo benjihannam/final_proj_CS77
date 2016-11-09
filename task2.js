@@ -31,7 +31,7 @@ var PhongFragmentSource = `
     // one output of gl_Fragcolor- default output
     
     const vec3 LightPosition = vec3(4.0, -4.0, 10.0);
-    const vec3 LightIntensity = vec3(20.0);
+    const vec3 LightIntensity = vec3(400.0);
     const vec3 ka = 0.3*vec3(1.0, 0.5, 0.5);
     const vec3 kd = 0.7*vec3(1.0, 0.5, 0.5);
     const vec3 ks = vec3(0.4);
@@ -52,7 +52,7 @@ var PhongFragmentSource = `
         vec3 l = LightPosition - vec3(globVect);
         vec3 camera_loc = vec3(InvertedView * vec4(0.0, 0.0, 0.0, 0.0));
         vec3 norm = vec3(InvertedModel * vec4(vNormal, 0.0)); //should be 0
-        float cos = dot(normalize(norm), normalize(l));
+        float cosine = dot(normalize(norm), normalize(l));
         float n_dot_l = dot(normalize(norm), normalize(l));
         float n_dot_v = dot(normalize(norm), normalize(camera_loc));
 
@@ -61,38 +61,20 @@ var PhongFragmentSource = `
 
         float alpha = max(ang_vn, ang_ln);
         float beta = min(ang_vn, ang_ln);
-        vec3 l1 = (normalize(norm) * dot(normalize(camera_loc), normalize(norm)));
-        vec3 l2 = normalize(l) - (normalize(norm) * dot(normalize(l), normalize(norm)));
-        float gamma = dot(l1, l2);
 
-        float r_2 = roughness * roughness;
-        float r_2_offset = (r_2 / (r_2 + 0.09));
-        float C1 = 1.0 - 0.5 * (r_2 / (r_2 + 0.33));
-        float C2 = 0.45 * r_2_offset;
+        float A = 1.0 - 0.5*(roughness*roughness / (roughness*roughness + 0.57));
+        float B = 0.45*(roughness*roughness / (roughness*roughness + 0.09));
 
-        if(gamma >= 0.0)
-        {
-            C2 *= sin(alpha);
-        }
-        else
-        {
-            C2 *= (sin(alpha) - pow((2.0 * beta) / PI, 3.0));
-        }
+        vec3 incident_light = LightIntensity / pow(length(l), 2.0); //this is the irradiance, albedo is kd
+        cosine = max(0.0, cosine);
+        vec3 lambert = kd * cosine * incident_light;
 
-        float powValue = (4.0 * alpha * beta) / (PI * PI);
-        float C3  = 0.125 * r_2_offset * powValue * powValue;
-
-        float A = gamma * C2 * tan(beta);
-        float B = (1.0 - abs(gamma)) * C3 * tan((alpha + beta) / 2.0);
-     
-        float L1 = max(0.0, n_dot_l) * (C1 + A + B);
-        
-        float twoBetaPi = 2.0 * beta / PI;
-        float L2 = 0.17 * max(0.0, n_dot_l) * (r_2 / (r_2 + 0.13)) * (1.0 - gamma * twoBetaPi * twoBetaPi);
-
-        vec3 incident_light = LightIntensity / pow(length(l), 2.0);
-        cos = max(0.0, cos);
-        vec3 lambert = kd * cos * incident_light;
+        float dotted = (1.0/PI) * cos(ang_ln) * (A + (B * sin(alpha) * sin(beta) * 0.5));
+        vec3 L_r = kd * dotted * incident_light;
+        // else {
+        //     vec3 L_r = 10.0 * cos_a * incident_light;
+        // }
+        //vec3 L_r = 10.0 * cos_a * incident_light;
 
         // vec3 h = normalize(camera_loc) + normalize(l); //- globVect
         // float cosa = dot(normalize(h), normalize(norm));
@@ -101,8 +83,7 @@ var PhongFragmentSource = `
 
         // gl_FragColor = vec4(lambert + blinn + ka, 1.0);
 
-        vec3 fin = (L1 + L2)*kd;
-        gl_FragColor = vec4(fin, 1.0);
+        gl_FragColor = vec4(L_r, 1.0);
     }
 `;
 
