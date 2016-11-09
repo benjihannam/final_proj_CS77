@@ -45,7 +45,7 @@ var PhongFragmentSource = `
     uniform mat4 InvertedModel;
     void main() {
 
-        float roughness = 1.0;
+        float roughness = 0.5;
     
         const float PI = 3.14159;
 
@@ -65,10 +65,10 @@ var PhongFragmentSource = `
         vec3 l2 = normalize(l) - (normalize(norm) * dot(normalize(l), normalize(norm)));
         float gamma = dot(l1, l2);
 
-        float roughnessSquared = roughness * roughness;
-        float roughnessSquared9 = (roughnessSquared / (roughnessSquared + 0.09));
-        float C1 = 1.0 - 0.5 * (roughnessSquared / (roughnessSquared + 0.33));
-        float C2 = 0.45 * roughnessSquared9;
+        float r_2 = roughness * roughness;
+        float r_2_offset = (r_2 / (r_2 + 0.09));
+        float C1 = 1.0 - 0.5 * (r_2 / (r_2 + 0.33));
+        float C2 = 0.45 * r_2_offset;
 
         if(gamma >= 0.0)
         {
@@ -80,27 +80,15 @@ var PhongFragmentSource = `
         }
 
         float powValue = (4.0 * alpha * beta) / (PI * PI);
-        float C3  = 0.125 * roughnessSquared9 * powValue * powValue;
+        float C3  = 0.125 * r_2_offset * powValue * powValue;
 
         float A = gamma * C2 * tan(beta);
         float B = (1.0 - abs(gamma)) * C3 * tan((alpha + beta) / 2.0);
      
-        // put it all together
         float L1 = max(0.0, n_dot_l) * (C1 + A + B);
         
-        // also calculate interreflection
         float twoBetaPi = 2.0 * beta / PI;
-        //TODO: p is squared in this case... how to separate this?
-        float L2 = 0.17 * max(0.0, n_dot_l) * (roughnessSquared / (roughnessSquared + 0.13)) * (1.0 - gamma * twoBetaPi * twoBetaPi);
-
-        // float A = 1.0 - 0.5 * (roughnessSquared / (roughnessSquared + 0.57));
-
-        // float B = 0.45 * (roughnessSquared / (roughnessSquared + 0.09));
- 
-        // float C = sin(alpha) * tan(beta);
-
-        // float L1 = max(0.0, n_dot_l) * (A + B * max(0.0, gamma) * C);
-        //float L1 = max(0.0, n_dot_l);
+        float L2 = 0.17 * max(0.0, n_dot_l) * (r_2 / (r_2 + 0.13)) * (1.0 - gamma * twoBetaPi * twoBetaPi);
 
         vec3 incident_light = LightIntensity / pow(length(l), 2.0);
         cos = max(0.0, cos);
