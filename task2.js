@@ -23,10 +23,10 @@ var PhongFragmentSource = `
     const vec3 LightPosition = vec3(4.0, -4.0, 10.0);
     const vec3 LightIntensity = vec3(400.0);
     const vec3 ka = 0.3*vec3(1.0, 0.5, 0.5);
-    const vec3 kd = 0.7*vec3(1.0, 0.5, 0.5);
+  //  const vec3 kd = 0.7*vec3(1.0, 0.5, 0.5);
+    const vec3 kd = 0.7*vec3(0.5, 0.7, 0.7);
     const vec3 ks = vec3(0.4);
     const float n = 60.0; //phong exponent
-
 
     varying vec4 globalPosition;
     varying vec3 vNormal;
@@ -147,11 +147,13 @@ Task2.prototype.render = function(gl, w, h) {
     var view =
         Matrix.translate(0, 0, -5).multiply(
         Matrix.rotate(this.cameraAngle, 1, 0, 0));
-    var rotation = Matrix.rotate(Date.now()/25, 0, 1, 0);
-    var cubeModel = Matrix.translate(-1.8, 0, 0).multiply(rotation);
-    var sphereModel = Matrix.translate(1.8, 0, 0).multiply(rotation).multiply(Matrix.scale(1.2, 1.2, 1.2));
+    var rotation = Matrix.rotate(Date.now()/25, 0.4327, 1, 0);
+    var cubeModel = Matrix.translate(-3.8, 2, 0).multiply(rotation).multiply(Matrix.scale(0.3, 0.3, 0.3));
+    var sphereModel = Matrix.translate(-1.8, 0, 0).multiply(rotation).multiply(Matrix.scale(1.2, 1.2, 1.2));
+    var sphereModel2 = Matrix.translate(1.8, 0, 0).multiply(rotation).multiply(Matrix.scale(0.5, 0.5, 0.5));
 
     this.sphereMesh.render(gl, sphereModel, view, projection);
+    this.sphereMesh.render(gl, sphereModel2, view, projection);
     this.cubeMesh.render(gl, cubeModel, view, projection);
 }
 

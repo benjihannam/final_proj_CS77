@@ -4,7 +4,7 @@ function setupTask(canvasId, taskFunction) {
         console.log("Could not find canvas with id", canvasId);
         return;
     }
-    
+
     try {
         var gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
     } catch (e) {}
@@ -12,7 +12,7 @@ function setupTask(canvasId, taskFunction) {
         console.log("Could not initialise WebGL");
         return;
     }
-    
+
     var renderWidth, renderHeight;
     function computeCanvasSize() {
         renderWidth = Math.min(canvas.parentNode.clientWidth - 20, 820);
@@ -21,12 +21,12 @@ function setupTask(canvasId, taskFunction) {
         canvas.height = renderHeight;
         gl.viewport(0, 0, renderWidth, renderHeight);
     }
-    
+
     window.addEventListener('resize', computeCanvasSize);
     computeCanvasSize();
-    
+
     var task = new taskFunction(gl);
-    
+
     var mouseDown = false;
     var lastMouseY;
     var mouseMoveListener = function(event) {
@@ -47,12 +47,12 @@ function setupTask(canvasId, taskFunction) {
             document.removeEventListener('mousemove', mouseMoveListener);
         }
     });
-    
+
     var renderLoop = function() {
         task.render(gl, renderWidth, renderHeight);
         window.requestAnimationFrame(renderLoop);
     }
     window.requestAnimationFrame(renderLoop);
-    
+
     return task;
 }
