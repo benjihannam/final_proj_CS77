@@ -118,7 +118,7 @@ var ShadedTriangleMesh = function(gl, vertexPositions, vertexNormals, indices, v
         // gl.bindTexture(gl.TEXTURE_2D, neheTexture);
     }
 
-    neheTexture.image.src = "https://github.com/lolomitch/final_proj_CS77/blob/lauren/worley.gif";
+    neheTexture.image.src = "https://github.com/lolomitch/final_proj_CS77/blob/lauren/crate.gif";
 
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, neheTexture);
