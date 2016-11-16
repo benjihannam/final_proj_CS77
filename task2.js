@@ -97,31 +97,31 @@ var ShadedTriangleMesh = function(gl, vertexPositions, vertexNormals, indices, v
     this.normalVbo = createVertexBuffer(gl, vertexNormals);
     this.indexIbo = createIndexBuffer(gl, indices);
     this.shaderProgram = createShaderProgram(gl, vertexSource, fragmentSource);
-    var tex = gl.createTexture();
-    gl.bindTexture(gl.TEXTURE_2D, tex);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([255, 0, 0, 255]));
-    var img = new Image();
-    // neheTexture.image.src = "worley.gif";
-    // neheTexture.image = THREE.ImageUtils.loadTexture("worley.gif");
-    img.onload = function() {
+    neheTexture = gl.createTexture();
+    neheTexture.image = new Image();
+    neheTexture.image.onload = function (){
         // THREE.ImageUtils.crossOrigin = '';
         // var mapOverlay = THREE.ImageUtils.loadTexture('http://i.imgur.com/3tU4Vig.jpg');
         // handleLoadedTexture(neheTexture)
-        gl.bindTexture(gl.TEXTURE_2D, tex);
+        gl.bindTexture(gl.TEXTURE_2D, neheTexture);
         gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, neheTexture.image);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
         gl.bindTexture(gl.TEXTURE_2D, null);
-        setupTextureFilteringAndMips(img.width, img.height);
+        setupTextureFilteringAndMips(neheTexture.image.width, neheTexture.image.height);
+        gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
         // gl.activeTexture(gl.TEXTURE0);
         // gl.bindTexture(gl.TEXTURE_2D, neheTexture);
     }
 
-    img.src = "worley.gif";
+    neheTexture.image.src = "https://github.com/lolomitch/final_proj_CS77/blob/lauren/worley.gif";
 
     gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, tex);
+    gl.bindTexture(gl.TEXTURE_2D, neheTexture);
     gl.uniform1i(this.shaderProgram.samplerUniform, 0);
 }
 
