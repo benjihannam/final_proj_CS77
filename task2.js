@@ -5,15 +5,18 @@ var PhongVertexSource = `
 
     attribute vec3 Position;
     attribute vec3 Normal;
+    attribute vec2 aTextureCoord;
 
     varying vec3 vNormal;
     varying vec4 globalPosition;
+    varying vec2 vTextureCoord;
 
     void main() {
 
         gl_Position = ModelViewProjection * vec4(Position, 1.0);
         globalPosition = Model * vec4(Position, 1.0);
         vNormal = Normal;
+        vTextureCoord = aTextureCoord;
     }
 `;
 var PhongFragmentSource = `
@@ -22,19 +25,40 @@ var PhongFragmentSource = `
 
     const vec3 LightPosition = vec3(4.0, -4.0, 10.0);
     const vec3 LightIntensity = vec3(400.0);
-    const vec3 ka = 0.3*vec3(1.0, 0.5, 0.5);
+    //const vec3 ka = 0.3*vec3(1.0, 0.5, 0.5);
   //  const vec3 kd = 0.7*vec3(1.0, 0.5, 0.5);
-    const vec3 kd = 0.7*vec3(0.5, 0.7, 0.7);
+    vec3 kd;
     const vec3 ks = vec3(0.4);
     const float n = 60.0; //phong exponent
+    // Worley stuff
+
+    varying vec2 vTextureCoord;
+
+    uniform sampler2D uSampler;
+
 
     varying vec4 globalPosition;
     varying vec3 vNormal;
 
     uniform mat4 ViewInverse;
     uniform mat4 ModelInverse;
+    // if (sin(globalPosition[0]) < 0) {
+    //     const vec3 ka = 0.3*vec3(1.0, 0.5, 0.5);
+    // }
+    // else {
+    //     const vec3 ka = 0.5*vec3(0.5, 1.0, 0.5);
+    // }
     void main() {
 
+        if (sin(10.0*vNormal[0]) < 0.0) {
+            //console.log("yes");
+            const vec3 ka = 0.3*vec3(1.0, 0.5, 0.5);
+            kd = 0.7*vec3(0.5, 0.7, 0.7);
+        }
+        else {
+            const vec3 ka = 0.5*vec3(0.5, 1.0, 0.5);
+            kd = 0.7*vec3(1.0, 0.7, 0.7);
+        }
         float roughness = 0.5;
 
         const float PI = 3.14159;
@@ -62,23 +86,10 @@ var PhongFragmentSource = `
         float dotted = (1.0/PI) * cos(ang_ln) * (A + (B * sin(alpha) * sin(beta) * 0.5));
         vec3 L_r = kd * dotted * incident_light;
 
-        gl_FragColor = vec4(L_r, 1.0);
+        // gl_FragColor = vec4(L_r, 1.0);
+        gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
     }
 `;
-
-/*
-// else {
-//     vec3 L_r = 10.0 * cos_a * incident_light;
-// }
-//vec3 L_r = 10.0 * cos_a * incident_light;
-
-// vec3 h = normalize(camera_loc) + normalize(l); //- globalPosition
-// float cosa = dot(normalize(h), normalize(norm));
-// cosa = max(0.0, cosa);
-// vec3 blinn = ks * incident_light * pow(cosa, n);
-
-// gl_FragColor = vec4(lambert + blinn + ka, 1.0);
-*/
 
 var ShadedTriangleMesh = function(gl, vertexPositions, vertexNormals, indices, vertexSource, fragmentSource) {
     this.indexCount = indices.length;
@@ -86,6 +97,32 @@ var ShadedTriangleMesh = function(gl, vertexPositions, vertexNormals, indices, v
     this.normalVbo = createVertexBuffer(gl, vertexNormals);
     this.indexIbo = createIndexBuffer(gl, indices);
     this.shaderProgram = createShaderProgram(gl, vertexSource, fragmentSource);
+    var tex = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, tex);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([255, 0, 0, 255]));
+    var img = new Image();
+    // neheTexture.image.src = "worley.gif";
+    // neheTexture.image = THREE.ImageUtils.loadTexture("worley.gif");
+    img.onload = function() {
+        // THREE.ImageUtils.crossOrigin = '';
+        // var mapOverlay = THREE.ImageUtils.loadTexture('http://i.imgur.com/3tU4Vig.jpg');
+        // handleLoadedTexture(neheTexture)
+        gl.bindTexture(gl.TEXTURE_2D, tex);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+        setupTextureFilteringAndMips(img.width, img.height);
+        // gl.activeTexture(gl.TEXTURE0);
+        // gl.bindTexture(gl.TEXTURE_2D, neheTexture);
+    }
+
+    img.src = "worley.gif";
+
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, tex);
+    gl.uniform1i(this.shaderProgram.samplerUniform, 0);
 }
 
 
@@ -125,6 +162,29 @@ ShadedTriangleMesh.prototype.render = function(gl, model, view, projection) {
     var modelInverseMatrix = gl.getUniformLocation(this.shaderProgram, "ModelInverse");
     gl.uniformMatrix4fv(modelInverseMatrix, false, model.inverse().m);
 
+    // var neheTexture = gl.createTexture();
+    // neheTexture.image = new Image();
+    // // neheTexture.image.src = "worley.gif";
+    // // neheTexture.image = THREE.ImageUtils.loadTexture("worley.gif");
+    // neheTexture.image.onload = function() {
+    //     // THREE.ImageUtils.crossOrigin = '';
+    //     // var mapOverlay = THREE.ImageUtils.loadTexture('http://i.imgur.com/3tU4Vig.jpg');
+    //     // handleLoadedTexture(neheTexture)
+    //     gl.bindTexture(gl.TEXTURE_2D, neheTexture);
+    //     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+    //     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, neheTexture.image);
+    //     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+    //     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+    //     gl.bindTexture(gl.TEXTURE_2D, null);
+    //     // gl.activeTexture(gl.TEXTURE0);
+    //     // gl.bindTexture(gl.TEXTURE_2D, neheTexture);
+    // }
+
+    // neheTexture.image.src = "worley.gif";
+
+    // gl.activeTexture(gl.TEXTURE0);
+    // gl.bindTexture(gl.TEXTURE_2D, neheTexture);
+    // gl.uniform1i(this.shaderProgram.samplerUniform, 0);
     gl.drawElements(gl.TRIANGLES, this.indexCount, gl.UNSIGNED_SHORT, 0);
 
 
@@ -137,6 +197,7 @@ var Task2 = function(gl) {
     this.cubeMesh = new ShadedTriangleMesh(gl, CubePositions, CubeNormals, CubeIndices, PhongVertexSource, PhongFragmentSource);
 
     gl.enable(gl.DEPTH_TEST);
+
 }
 
 Task2.prototype.render = function(gl, w, h) {
