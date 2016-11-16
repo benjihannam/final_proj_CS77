@@ -9,6 +9,9 @@ var PhongVertexSource = `
     varying vec3 vNormal;
     varying vec4 globalPosition;
 
+    attribute vec2 a_texcoord;
+    varying vec2 v_texcoord;
+
     void main() {
 
         gl_Position = ModelViewProjection * vec4(Position, 1.0);
@@ -33,6 +36,10 @@ var PhongFragmentSource = `
 
     uniform mat4 ViewInverse;
     uniform mat4 ModelInverse;
+
+    varying vec2 v_texcoord;
+    uniform sampler2D u_texture;
+
     void main() {
 
         float roughness = 0.5;
@@ -124,6 +131,13 @@ ShadedTriangleMesh.prototype.render = function(gl, model, view, projection) {
 
     var modelInverseMatrix = gl.getUniformLocation(this.shaderProgram, "ModelInverse");
     gl.uniformMatrix4fv(modelInverseMatrix, false, model.inverse().m);
+
+
+    // var texcoordLocation = gl.getAttribLocation(program, "a_texcoords");
+    // gl.enableVertexAttribArray(texcoordLocation);
+    // gl.vertexAttribPointer(texcoordLocation, 2, gl.FLOAT, false, 0, 0);
+    // setTexcoords(gl);
+
 
     gl.drawElements(gl.TRIANGLES, this.indexCount, gl.UNSIGNED_SHORT, 0);
 
