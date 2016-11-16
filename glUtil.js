@@ -53,6 +53,7 @@ function setupTask(canvasId, taskFunction) {
         window.requestAnimationFrame(renderLoop);
     }
     window.requestAnimationFrame(renderLoop);
+    init_text(gl);
 
     return task;
 }

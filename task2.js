@@ -91,25 +91,80 @@ var PhongFragmentSource = `
     }
 `;
 
+function isPowerOf2(value) {
+  return (value & (value - 1)) == 0;
+}
+
+function steupTextureFilteringAndMips(width, height) {
+    if (isPowerOf2(width) && isPowerOf2(height)) {
+    // the dimensions are power of 2 so generate mips and turn on 
+    // tri-linear filtering.
+        gl.generateMipmap(gl.TEXTURE_2D);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+    } 
+    else {
+    // at least one of the dimensions is not a power of 2 so set the filtering
+    // so WebGL will render it.
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    }
+}
 var ShadedTriangleMesh = function(gl, vertexPositions, vertexNormals, indices, vertexSource, fragmentSource) {
     this.indexCount = indices.length;
     this.positionVbo = createVertexBuffer(gl, vertexPositions);
     this.normalVbo = createVertexBuffer(gl, vertexNormals);
     this.indexIbo = createIndexBuffer(gl, indices);
     this.shaderProgram = createShaderProgram(gl, vertexSource, fragmentSource);
-    neheTexture = gl.createTexture();
-    neheTexture.image = new Image();
-    neheTexture.image.onload = function (){
-        // THREE.ImageUtils.crossOrigin = '';
-        // var mapOverlay = THREE.ImageUtils.loadTexture('http://i.imgur.com/3tU4Vig.jpg');
-        // handleLoadedTexture(neheTexture)
-        gl.bindTexture(gl.TEXTURE_2D, neheTexture);
+    // neheTexture = gl.createTexture();
+    // var nh = gl.createTexture();
+    // // gl.bindTexture(gl.TEXTURE_2D, nh);
+    // // gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([255, 0, 0, 255])); 
+    // nh.image = new Image();
+    // nh.image.src = "https://github.com/lolomitch/final_proj_CS77/blob/lauren/worley.gif";
+    // nh.image.onload = function (){
+    // //     // THREE.ImageUtils.crossOrigin = '';
+    // //     // var mapOverlay = THREE.ImageUtils.loadTexture('http://i.imgur.com/3tU4Vig.jpg');
+    // //     // handleLoadedTexture(neheTexture)
+    //     gl.bindTexture(gl.TEXTURE_2D, nh);
+    //     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+    //     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, nh.image);
+    //     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+    //     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+    //     gl.bindTexture(gl.TEXTURE_2D, null);
+    //     setupTextureFilteringAndMips(nh.image.width, nh.image.height);
+    //     gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    //     gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    //     gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    //     gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    //     // gl.activeTexture(gl.TEXTURE0);
+    //     // gl.bindTexture(gl.TEXTURE_2D, neheTexture);
+    // }
+
+    // //nh.image.src = "https://github.com/lolomitch/final_proj_CS77/blob/lauren/worley.gif";
+
+    // gl.activeTexture(gl.TEXTURE0);
+    // gl.bindTexture(gl.TEXTURE_2D, nh);
+    // gl.uniform1i(this.shaderProgram.samplerUniform, 0);
+}
+
+function init_text(gl) {
+    var nh = gl.createTexture();
+    // gl.bindTexture(gl.TEXTURE_2D, nh);
+    // gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([255, 0, 0, 255])); 
+    nh.image = new Image();
+    nh.image.src = "https://github.com/lolomitch/final_proj_CS77/blob/lauren/worley.gif";
+    nh.image.onload = function (){
+    //     // THREE.ImageUtils.crossOrigin = '';
+    //     // var mapOverlay = THREE.ImageUtils.loadTexture('http://i.imgur.com/3tU4Vig.jpg');
+    //     // handleLoadedTexture(neheTexture)
+        gl.bindTexture(gl.TEXTURE_2D, nh);
         gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, neheTexture.image);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, nh.image);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
         gl.bindTexture(gl.TEXTURE_2D, null);
-        setupTextureFilteringAndMips(neheTexture.image.width, neheTexture.image.height);
+        setupTextureFilteringAndMips(nh.image.width, nh.image.height);
         gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
         gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
         gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
@@ -118,11 +173,11 @@ var ShadedTriangleMesh = function(gl, vertexPositions, vertexNormals, indices, v
         // gl.bindTexture(gl.TEXTURE_2D, neheTexture);
     }
 
-    neheTexture.image.src = "https://github.com/lolomitch/final_proj_CS77/blob/lauren/crate.gif";
+    //nh.image.src = "https://github.com/lolomitch/final_proj_CS77/blob/lauren/worley.gif";
 
     gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, neheTexture);
-    gl.uniform1i(this.shaderProgram.samplerUniform, 0);
+    gl.bindTexture(gl.TEXTURE_2D, nh);
+    // gl.uniform1i(this.shaderProgram.samplerUniform, 0);
 }
 
 
