@@ -122,6 +122,55 @@ var MoonFragmentSource = `
 `;
 
 
+
+var ValueVertexSource = `
+
+    uniform mat4 ModelViewProjection;
+    uniform mat4 Model;
+
+    attribute vec3 Position;
+    attribute vec3 Normal;
+
+    varying vec3 vNormal;
+    varying vec4 globalPosition;
+
+    attribute vec2 aTextureCoord;
+    varying vec2 vTextureCoord;
+
+    const vec3 uAmbientColor = 0.2*vec3(1, 1, 1);
+    const vec3 uLightingDirection = vec3(-1, -1, -1);
+    const vec3 uDirectionalColor = 0.8*vec3(1, 1, 1);
+
+
+    void main() {
+
+        gl_Position = ModelViewProjection * vec4(Position, 1.0);
+        globalPosition = Model * vec4(Position, 1.0);
+        vNormal = Normal;
+
+        float directionalLightWeighting = max(dot(vNormal, uLightingDirection), 0.0);
+
+        vTextureCoord = aTextureCoord;
+
+    }
+`;
+
+
+var ValueFragmentSource = `
+    precision mediump float;
+
+
+    varying vec2 vTextureCoord;
+    uniform sampler2D uSampler;
+
+    void main() {
+        //gl_FragColor = vec4(textureColor.rgb, textureColor.a);
+        gl_FragColor = texture2D(uSampler, vTextureCoord);
+        //gl_FragColor = vec4(1, 1, 1, 1);
+    }
+`;
+
+
 /*
 // else {
 //     vec3 L_r = 10.0 * cos_a * incident_light;
@@ -195,17 +244,18 @@ ShadedTriangleMesh.prototype.render = function(gl, model, view, projection) {
 
 }
 
-var MoonTriangleMesh = function(gl, texture, vertexPositions, vertexNormals, indices, vertexSource, fragmentSource) {
+var MoonTriangleMesh = function(gl, textureim, texturebuf, vertexPositions, vertexNormals, indices, vertexSource, fragmentSource) {
     this.indexCount = indices.length;
     this.positionVbo = createVertexBuffer(gl, vertexPositions);
     this.normalVbo = createVertexBuffer(gl, vertexNormals);
     this.indexIbo = createIndexBuffer(gl, indices);
-    this.moonVertexTextureCoordBuffer = createTextureBuffer(gl, texture);
+    this.moonVertexTextureCoordBuffer = createTextureBuffer(gl, texturebuf);
+    this.texture = textureim;
 
     this.shaderProgram = createShaderProgram(gl, vertexSource, fragmentSource);
 }
 
-MoonTriangleMesh.prototype.render = function(gl, model, view, projection) {
+MoonTriangleMesh.prototype.render = function(gl, model, view, projection, tex) {
     // TODO: Implement a render method to do Lambert- and Blinn-Phong Shading
     //       This method will closely follow the render method in assignment 1.
     //       However, this time you will need to setup two attributes (for vertex
@@ -214,6 +264,9 @@ MoonTriangleMesh.prototype.render = function(gl, model, view, projection) {
 
     var temp = view.multiply(model);
     var ModelViewProjection = projection.multiply(temp);
+
+    gl.bindTexture(gl.TEXTURE_2D, tex);
+
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indexIbo);
 
@@ -249,6 +302,8 @@ MoonTriangleMesh.prototype.render = function(gl, model, view, projection) {
     gl.uniformMatrix4fv(modelInverseMatrix, false, model.inverse().m);
 
     var samplerUniform = gl.getUniformLocation(this.shaderProgram, "uSampler");
+
+    // can pass time directly to fragment shader to move texture around (sin + position or something)
 
 
     gl.drawElements(gl.TRIANGLES, this.indexCount, gl.UNSIGNED_SHORT, 0);
@@ -300,12 +355,10 @@ var Task2 = function(gl) {
 
     var moonTexture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, moonTexture);
-
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
               new Uint8Array([0, 0, 255, 255]));
-
     var image = new Image();
-    image.src = "value.png";
+    image.src = "moon.gif";
     image.addEventListener('load', function() {
         // Now that the image has loaded make copy it to the texture.
         gl.bindTexture(gl.TEXTURE_2D, moonTexture);
@@ -313,8 +366,47 @@ var Task2 = function(gl) {
         gl.generateMipmap(gl.TEXTURE_2D);
       });
 
-    this.moonMesh = new MoonTriangleMesh(gl, TextureCoordinateData, TSpherePositions, TSphereNormals, TSphereIndices, MoonVertexSource, MoonFragmentSource);
+    var valueTexture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, valueTexture);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+              new Uint8Array([0, 0, 255, 255]));
+    var image3 = new Image();
+    image3.src = "value.png";
+    image3.addEventListener('load', function() {
+        // Now that the image has loaded make copy it to the texture.
+        gl.bindTexture(gl.TEXTURE_2D, valueTexture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image3);
+        gl.generateMipmap(gl.TEXTURE_2D);
+      });
+
+    var earthTexture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, earthTexture);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+              new Uint8Array([0, 0, 255, 255]));
+    var image2 = new Image();
+    image2.src = "earth.png";
+    image2.addEventListener('load', function() {
+        // Now that the image has loaded make copy it to the texture.
+        gl.bindTexture(gl.TEXTURE_2D, earthTexture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image2);
+        gl.generateMipmap(gl.TEXTURE_2D);
+      });
+
+
+
+    this.moonTexture = moonTexture;
+    this.earthTexture = earthTexture;
+    this.valueTexture = valueTexture;
+
+
+    //this.moonMesh = new MoonTriangleMesh(gl, moonTexture, TextureCoordinateData, TSpherePositions, TSphereNormals, TSphereIndices, MoonVertexSource, MoonFragmentSource);
+
     this.cubeMesh = new ShadedTriangleMesh(gl, CubePositions, CubeNormals, CubeIndices, PhongVertexSource, PhongFragmentSource);
+
+    this.earthMesh = new MoonTriangleMesh(gl, earthTexture, TextureCoordinateData, TSpherePositions, TSphereNormals, TSphereIndices, MoonVertexSource, MoonFragmentSource);
+
+    this.valueMesh = new MoonTriangleMesh(gl, valueTexture, TextureCoordinateData, TSpherePositions, TSphereNormals, TSphereIndices, MoonVertexSource, MoonFragmentSource);
+
 
     gl.enable(gl.DEPTH_TEST);
 }
@@ -332,10 +424,14 @@ Task2.prototype.render = function(gl, w, h) {
     var sphereModel = Matrix.translate(-1.8, 0, 0).multiply(rotation).multiply(Matrix.scale(1.2, 1.2, 1.2));
     var sphereModel2 = Matrix.translate(1.8, 0, 0).multiply(rotation).multiply(Matrix.scale(0.5, 0.5, 0.5));
 
-    this.sphereMesh.render(gl, sphereModel2, view, projection);
     //this.sphereMesh.render(gl, sphereModel2, view, projection);
-    this.moonMesh.render(gl, sphereModel, view, projection);
+    this.earthMesh.render(gl, sphereModel, view, projection, this.earthTexture);
+    //this.moonMesh.render(gl, sphereModel2, view, projection, this.moonTexture);
     this.cubeMesh.render(gl, cubeModel, view, projection);
+
+
+    this.valueMesh.render(gl, sphereModel2, view, projection, this.valueTexture);
+
 }
 
 Task2.prototype.dragCamera = function(dy) {
