@@ -164,9 +164,33 @@ var ValueFragmentSource = `
     uniform sampler2D uSampler;
 
     void main() {
-        //gl_FragColor = vec4(textureColor.rgb, textureColor.a);
-        gl_FragColor = texture2D(uSampler, vTextureCoord);
-        //gl_FragColor = vec4(1, 1, 1, 1);
+        float value = 0.0;
+        float size = 64.0;
+        float init_size = 64.0;
+        for(int i = 0; i < 6; i++){
+            value += (texture2D(uSampler, vTextureCoord/size))[0] * size;
+            size = size / 2.0;
+        }
+        value = value / 128.0;
+        vec4 color = vec4(value, value, value, 1.0);
+        if(value < 0.2){
+            color = vec4(0.0, 0.0, 0.5, 1.0);
+        }
+        else if(value < 0.4){
+           color = vec4(0.0, 0.0, 1.0, 1.0);
+       }
+       else if(value < 0.42){
+           color = vec4(0.0, 1.0, 1.0, 1.0);
+       }
+       else if(value < 0.8){
+           color = vec4(0.0, 0.5, 0.0, 1.0);;
+       }
+       else{
+           color = vec4(0.5, 0.4, 0.1, 1.0);;
+       }
+
+        gl_FragColor = color;
+        //gl_FragColor = texture2D(uSampler, vTextureCoord);
     }
 `;
 
@@ -405,7 +429,7 @@ var Task2 = function(gl) {
 
     this.earthMesh = new MoonTriangleMesh(gl, earthTexture, TextureCoordinateData, TSpherePositions, TSphereNormals, TSphereIndices, MoonVertexSource, MoonFragmentSource);
 
-    this.valueMesh = new MoonTriangleMesh(gl, valueTexture, TextureCoordinateData, TSpherePositions, TSphereNormals, TSphereIndices, MoonVertexSource, MoonFragmentSource);
+    this.valueMesh = new MoonTriangleMesh(gl, valueTexture, TextureCoordinateData, TSpherePositions, TSphereNormals, TSphereIndices, MoonVertexSource, ValueFragmentSource);
 
 
     gl.enable(gl.DEPTH_TEST);
