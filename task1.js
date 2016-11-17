@@ -14,7 +14,7 @@ var WhiteVertexSource = `
 `;
 var WhiteFragmentSource = `
     precision highp float;
-    
+
     // TODO: Implement a simgple GLSL fragment shader that assigns a white color to gl_FragColor
     void main() {
         gl_FragColor = vec4(1.0);
@@ -41,6 +41,15 @@ function createIndexBuffer(gl, indexData) {
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indexData), gl.STATIC_DRAW);
     return indbuf;
 }
+
+function createTextureBuffer(gl, textureData) {
+
+    var texbuf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, texbuf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureData), gl.STATIC_DRAW);
+    return texbuf;
+}
+
 function createShaderObject(gl, shaderSource, shaderType) {
     // TODO: Create a shader of type `shaderType`, submit the source code `shaderSource`,
     //       compile it and return the shader
@@ -54,18 +63,22 @@ function createShaderObject(gl, shaderSource, shaderType) {
 function createShaderProgram(gl, vertexSource, fragmentSource) {
     var vertexShader = createShaderObject(gl, vertexSource, gl.VERTEX_SHADER);
     var fragmentShader = createShaderObject(gl, fragmentSource, gl.FRAGMENT_SHADER);
-    
+
     // TODO: Create a shader program, attach `vertexShader` and `fragmentShader`
     //       to it, link the program and return the result.
     //       Commands you will need: gl.createProgram, gl.attachShader, gl.linkProgram
-    var shader = gl.createProgram(); 
-    gl.attachShader(shader, vertexShader); 
-    gl.attachShader(shader, fragmentShader); 
+    var shader = gl.createProgram();
+    gl.attachShader(shader, vertexShader);
+    gl.attachShader(shader, fragmentShader);
     gl.linkProgram(shader);
     var err = gl.getShaderInfoLog(fragmentShader);
-    if (err.length > 0) {
-        throw err;
+    var err2 = gl.getShaderInfoLog(vertexShader);
+
+    if (err.length > 0 || err2.length > 0) {
+      throw err;
+      console.log("something is wrong");
     }
+
     return shader;
 }
 
@@ -89,7 +102,7 @@ TriangleMesh.prototype.render = function(gl, model, view, projection) {
     //       Commands you will need: gl.useProgram, gl.uniformMatrix4fv, gl.getUniformLocation,
     //                               gl.bindBuffer, gl.getAttribLocation, gl.enableVertexAttribArray,
     //                               gl.vertexAttribPointer, gl.drawElements
-    
+
     // IMPORTANT HINT:
     //      OpenGL expects Matrix in column-major order, but matrix.js stores them in row-major order
     //      To solve this, you need to transpose the matrix before passing it to OpenGL
@@ -102,26 +115,26 @@ TriangleMesh.prototype.render = function(gl, model, view, projection) {
     var matrix = (projection.multiply(view)).multiply(model);
     var location = gl.getUniformLocation(this.shaderProgram, "ModelViewProjection");
     gl.uniformMatrix4fv(location, false, matrix.transpose().m);
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.positionVbo); 
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indexIbo); 
-    var pos = gl.getAttribLocation(this.shaderProgram,"Position"); 
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.positionVbo);
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indexIbo);
+    var pos = gl.getAttribLocation(this.shaderProgram,"Position");
     gl.enableVertexAttribArray(pos);
     gl.vertexAttribPointer(pos, 3, gl.FLOAT, false, 0, 0);
     gl.drawElements(gl.TRIANGLES, this.indexCount, gl.UNSIGNED_SHORT, 0);
-    
+
 }
 
 var Task1 = function(gl) {
     this.cameraAngle = 0;
     this.mesh = new TriangleMesh(gl, CubePositions, CubeIndices, WhiteVertexSource, WhiteFragmentSource);
-    
+
     gl.enable(gl.DEPTH_TEST);
 }
 
 Task1.prototype.render = function(gl, w, h) {
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    
+
     var projection = Matrix.perspective(60, w/h, 0.1, 100);
     var view =
         Matrix.translate(0, 0, -5).multiply(

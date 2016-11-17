@@ -9,9 +9,6 @@ var PhongVertexSource = `
     varying vec3 vNormal;
     varying vec4 globalPosition;
 
-    attribute vec2 a_texcoord;
-    varying vec2 v_texcoord;
-
     void main() {
 
         gl_Position = ModelViewProjection * vec4(Position, 1.0);
@@ -19,6 +16,7 @@ var PhongVertexSource = `
         vNormal = Normal;
     }
 `;
+
 var PhongFragmentSource = `
     precision highp float;
     // one output of gl_Fragcolor- default output
@@ -36,9 +34,6 @@ var PhongFragmentSource = `
 
     uniform mat4 ViewInverse;
     uniform mat4 ModelInverse;
-
-    varying vec2 v_texcoord;
-    uniform sampler2D u_texture;
 
     void main() {
 
@@ -70,8 +65,62 @@ var PhongFragmentSource = `
         vec3 L_r = kd * dotted * incident_light;
 
         gl_FragColor = vec4(L_r, 1.0);
+
     }
 `;
+
+
+var MoonVertexSource = `
+
+    uniform mat4 ModelViewProjection;
+    uniform mat4 Model;
+
+    attribute vec3 Position;
+    attribute vec3 Normal;
+
+    varying vec3 vNormal;
+    varying vec4 globalPosition;
+
+    attribute vec2 aTextureCoord;
+    varying vec2 vTextureCoord;
+
+    const vec3 uAmbientColor = 0.2*vec3(1, 1, 1);
+    const vec3 uLightingDirection = vec3(-1, -1, -1);
+    const vec3 uDirectionalColor = 0.8*vec3(1, 1, 1);
+    // const vLightWeighting = 1;
+
+
+    void main() {
+
+        gl_Position = ModelViewProjection * vec4(Position, 1.0);
+        globalPosition = Model * vec4(Position, 1.0);
+        vNormal = Normal;
+
+        float directionalLightWeighting = max(dot(vNormal, uLightingDirection), 0.0);
+        // vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;
+        //
+        vTextureCoord = aTextureCoord;
+
+    }
+`;
+
+
+var MoonFragmentSource = `
+    precision mediump float;
+
+
+    varying vec2 vTextureCoord;
+    uniform sampler2D uSampler;
+    // const vec3 wLightWeighting = 1;
+
+    void main() {
+        //vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+        //gl_FragColor = vec4(textureColor.rgb, textureColor.a);
+        gl_FragColor = texture2D(uSampler, vTextureCoord);
+        //gl_FragColor = vec4(1, 1, 1, 1);
+    }
+`;
+
 
 /*
 // else {
@@ -94,6 +143,8 @@ var ShadedTriangleMesh = function(gl, vertexPositions, vertexNormals, indices, v
     this.indexIbo = createIndexBuffer(gl, indices);
     this.shaderProgram = createShaderProgram(gl, vertexSource, fragmentSource);
 }
+
+
 
 
 ShadedTriangleMesh.prototype.render = function(gl, model, view, projection) {
@@ -144,10 +195,125 @@ ShadedTriangleMesh.prototype.render = function(gl, model, view, projection) {
 
 }
 
+var MoonTriangleMesh = function(gl, texture, vertexPositions, vertexNormals, indices, vertexSource, fragmentSource) {
+    this.indexCount = indices.length;
+    this.positionVbo = createVertexBuffer(gl, vertexPositions);
+    this.normalVbo = createVertexBuffer(gl, vertexNormals);
+    this.indexIbo = createIndexBuffer(gl, indices);
+    this.moonVertexTextureCoordBuffer = createTextureBuffer(gl, texture);
+
+    this.shaderProgram = createShaderProgram(gl, vertexSource, fragmentSource);
+}
+
+MoonTriangleMesh.prototype.render = function(gl, model, view, projection) {
+    // TODO: Implement a render method to do Lambert- and Blinn-Phong Shading
+    //       This method will closely follow the render method in assignment 1.
+    //       However, this time you will need to setup two attributes (for vertex
+    //       position and vertex normal). You may also need to supply multiple uniforms.
+    gl.useProgram(this.shaderProgram);
+
+    var temp = view.multiply(model);
+    var ModelViewProjection = projection.multiply(temp);
+
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indexIbo);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.positionVbo);
+
+    var positionLoc = gl.getAttribLocation(this.shaderProgram, "Position");
+    gl.enableVertexAttribArray(positionLoc);
+    gl.vertexAttribPointer(positionLoc, 3, gl.FLOAT, false, 0, 0);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.normalVbo);
+
+    var normalLoc = gl.getAttribLocation(this.shaderProgram, "Normal");
+    gl.enableVertexAttribArray(normalLoc);
+    gl.vertexAttribPointer(normalLoc, 3, gl.FLOAT, false, 0, 0);
+
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.moonVertexTextureCoordBuffer);
+    var texture = gl.getAttribLocation(this.shaderProgram, "aTextureCoord");
+    gl.enableVertexAttribArray(texture);
+    gl.vertexAttribPointer(texture, 2, gl.FLOAT, false, 0, 0);
+
+
+    var mvp = gl.getUniformLocation(this.shaderProgram, "ModelViewProjection");
+    gl.uniformMatrix4fv(mvp, false, ModelViewProjection.transpose().m);
+
+    var modelMatrix = gl.getUniformLocation(this.shaderProgram, "Model");
+    gl.uniformMatrix4fv(modelMatrix, false, model.transpose().m);
+
+    var viewInverseMatrix = gl.getUniformLocation(this.shaderProgram, "ViewInverse");
+    gl.uniformMatrix4fv(viewInverseMatrix, false, view.inverse().transpose().m);
+
+    var modelInverseMatrix = gl.getUniformLocation(this.shaderProgram, "ModelInverse");
+    gl.uniformMatrix4fv(modelInverseMatrix, false, model.inverse().m);
+
+    var samplerUniform = gl.getUniformLocation(this.shaderProgram, "uSampler");
+
+
+    gl.drawElements(gl.TRIANGLES, this.indexCount, gl.UNSIGNED_SHORT, 0);
+
+    // var ambientColorUniform = gl.getUniformLocation(shaderProgram, "uAmbientColor");
+    // var lightingDirectionUniform = gl.getUniformLocation(shaderProgram, "uLightingDirection");
+    // var directionalColorUniform = gl.getUniformLocation(shaderProgram, "uDirectionalColor");
+
+
+
+
+    // moonTexture.image = new Image();
+    // moonTexture.image.crossOrigin = '';
+    // moonTexture.image.onload = function () {
+    //   gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+    //   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, moonTexture.image);
+    //   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+    //   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+    //   gl.bindTexture(gl.TEXTURE_2D, null);
+    // }
+    // moonTexture.image.src = "moon.gif";
+
+    // gl.activeTexture(gl.TEXTURE0);
+    // gl.bindTexture(gl.TEXTURE_2D, moonTexture);
+    // gl.uniform1i(shaderProgram.samplerUniform, 0);
+
+
+    // var texcoordLocation = gl.getAttribLocation(program, "a_texcoords");
+    // gl.enableVertexAttribArray(texcoordLocation);
+    // gl.vertexAttribPointer(texcoordLocation, 2, gl.FLOAT, false, 0, 0);
+    // setTexcoords(gl);
+    // shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "uSampler");
+    //
+    // shaderProgram.TextureCoordinateAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
+    // gl.enableVertexAttribArray(shaderProgram.TextureCoordinateAttribute);
+    //
+    //
+    //
+    // gl.bindBuffer(gl.ARRAY_BUFFER, moonVertexTextureCoordBuffer);
+    // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordData), gl.STATIC_DRAW);
+
+
+}
+
 
 var Task2 = function(gl) {
     this.cameraAngle = 0;
     this.sphereMesh = new ShadedTriangleMesh(gl, SpherePositions, SphereNormals, SphereIndices, PhongVertexSource, PhongFragmentSource);
+
+    var moonTexture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, moonTexture);
+
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+              new Uint8Array([0, 0, 255, 255]));
+
+    var image = new Image();
+    image.src = "value.png";
+    image.addEventListener('load', function() {
+        // Now that the image has loaded make copy it to the texture.
+        gl.bindTexture(gl.TEXTURE_2D, moonTexture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image);
+        gl.generateMipmap(gl.TEXTURE_2D);
+      });
+
+    this.moonMesh = new MoonTriangleMesh(gl, TextureCoordinateData, TSpherePositions, TSphereNormals, TSphereIndices, MoonVertexSource, MoonFragmentSource);
     this.cubeMesh = new ShadedTriangleMesh(gl, CubePositions, CubeNormals, CubeIndices, PhongVertexSource, PhongFragmentSource);
 
     gl.enable(gl.DEPTH_TEST);
@@ -166,8 +332,9 @@ Task2.prototype.render = function(gl, w, h) {
     var sphereModel = Matrix.translate(-1.8, 0, 0).multiply(rotation).multiply(Matrix.scale(1.2, 1.2, 1.2));
     var sphereModel2 = Matrix.translate(1.8, 0, 0).multiply(rotation).multiply(Matrix.scale(0.5, 0.5, 0.5));
 
-    this.sphereMesh.render(gl, sphereModel, view, projection);
     this.sphereMesh.render(gl, sphereModel2, view, projection);
+    //this.sphereMesh.render(gl, sphereModel2, view, projection);
+    this.moonMesh.render(gl, sphereModel, view, projection);
     this.cubeMesh.render(gl, cubeModel, view, projection);
 }
 
