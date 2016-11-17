@@ -206,38 +206,44 @@ var ValueFragmentSource = `
 
         vec4 color = vec4(value, value, value, 1.0);
         if(value < 0.1){
-            color = vec4(0.0, 0.0, 0.5, 1.0);
+            color = vec4(0.0, 0.0, 0.1, 1.0);
             ks = vec3(0.1);
+
         }
         else if(value < 0.2){
-           color = vec4(0.0, 0.0, 0.6, 1.0);
+           color = vec4(0.0, 0.0, 0.1, 1.0);
            ks = vec3(0.1);
+           
        }
        else if(value < 0.3){
-           color = vec4(0.0, 0.0, 0.7, 1.0);
+           color = vec4(0.0, 0.0, 0.2, 1.0);
            ks = vec3(0.1);
+           if(vTextureCoord[1] < 0.15 || vTextureCoord[1] > 0.85){
+            color = vec4(1.0, 1.0, 1.0, 0.0);
+            }
        }
        else if(value < 0.35){
-           color = vec4(0.0, 0.0, 0.8, 1.0);
+           color = vec4(0.0, 0.0, 0.3, 1.0);
            ks = vec3(0.1);
+        
        }
         else if(value < 0.4){
-           color = vec4(0.0, 0.0, 1.0, 1.0);
+           color = vec4(0.0, 0.0, 0.4, 1.0);
            ks = vec3(0.1);
+        
        }
-       // else if(value < 0.42){
-       //     color = vec4(0.0, 1.0, 1.0, 1.0);
-       //     ks = vec3(0.1);
-       // }
        else if(value < 0.6){
-           color = vec4(0.0, 0.5, 0.0, 1.0);;
-           
+        color = vec4(0.0, 0.5, 0.0, 1.0);
+        //at the poles
+        if(vTextureCoord[1] < 0.15 || vTextureCoord[1] > 0.85){
+            color = vec4(1.0, 1.0, 1.0, 0.0);
+        }       
        }
        else if(value < 0.7){
            color = vec4(0.3, 0.5, 0.0, 1.0);;
            
        }
-       else if(value < 0.80){
+       else if(value < 0.75){
            color = vec4(0.4, 0.5, 0.0, 1.0);;
            
        }
@@ -470,7 +476,7 @@ var Task2 = function(gl) {
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
               new Uint8Array([0, 0, 255, 255]));
     var image2 = new Image();
-    image2.src = "earth.png";
+    image2.src = "earthnasa.png";
     image2.addEventListener('load', function() {
         // Now that the image has loaded make copy it to the texture.
         gl.bindTexture(gl.TEXTURE_2D, earthTexture);
@@ -505,7 +511,7 @@ Task2.prototype.render = function(gl, w, h) {
     var view =
         Matrix.translate(0, 0, -5).multiply(
         Matrix.rotate(this.cameraAngle, 1, 0, 0));
-    var rotation = Matrix.rotate(Date.now()/25, 0.4327, 1, 0);
+    var rotation = Matrix.rotate(Date.now()/100, 0.4327, 1, 0);
     var cubeModel = Matrix.translate(-3.8, 2, 0).multiply(rotation).multiply(Matrix.scale(0.3, 0.3, 0.3));
     var sphereModel = Matrix.translate(-1.8, 0, 0).multiply(rotation).multiply(Matrix.scale(1.2, 1.2, 1.2));
     var sphereModel2 = Matrix.translate(1.8, 0, 0).multiply(rotation).multiply(Matrix.scale(1.1, 1.1, 1.1));

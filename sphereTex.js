@@ -58,7 +58,7 @@ var TextureCoordinateData = [];
     var NumThetaBands = 30;
 
     for (var i = 0; i <= NumThetaBands; ++i) {
-        for (var j = 0; j < NumPhiBands; ++j) {
+        for (var j = 0; j <= NumPhiBands; ++j) {
             var theta = (i/NumThetaBands - 0.5)*Math.PI;
             var phi = 2*Math.PI*j/NumPhiBands;
 
