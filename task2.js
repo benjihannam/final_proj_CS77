@@ -160,10 +160,10 @@ var ValueFragmentSource = `
     precision mediump float;
 
     const vec3 LightPosition = vec3(5.0, 0.0, 100.0);
-    const vec3 LightIntensity = vec3(40000.0);
+    const vec3 LightIntensity = vec3(10000.0);
     uniform mat4 ViewInverse;
     uniform mat4 ModelInverse;
-    const float n = 60.0;
+    const float n = 1.0;
 
     varying vec3 vNormal;
     varying vec4 globalPosition;
@@ -202,17 +202,17 @@ var ValueFragmentSource = `
             value += (texture2D(uSampler, vTextureCoord/size))[0] * size;
             size = size / 2.0;
         }
-        value = value / 128.0 + 10.0 * time;
+        value = value / 128.0;
 
         vec4 color = vec4(value, value, value, 1.0);
         if(value < 0.1){
             color = vec4(0.0, 0.0, 0.1, 1.0);
-            ks = vec3(0.1);
+            ks = vec3(0.05);
 
         }
         else if(value < 0.2){
            color = vec4(0.0, 0.0, 0.1, 1.0);
-           ks = vec3(0.1);
+           ks = vec3(0.07);
            
        }
        else if(value < 0.3){
@@ -223,28 +223,28 @@ var ValueFragmentSource = `
             }
        }
        else if(value < 0.35){
-           color = vec4(0.0, 0.0, 0.3, 1.0);
-           ks = vec3(0.1);
+           color = vec4(0.0, 0.0, 0.25, 1.0);
+           ks = vec3(0.15);
         
        }
-        else if(value < 0.4){
-           color = vec4(0.0, 0.0, 0.4, 1.0);
-           ks = vec3(0.1);
+        else if(value < 0.5){
+           color = vec4(0.0, 0.0, 0.3, 1.0);
+           ks = vec3(0.17);
         
        }
        else if(value < 0.6){
-        color = vec4(0.0, 0.5, 0.0, 1.0);
+        color = vec4(0.0, 0.4, 0.0, 1.0);
         //at the poles
         if(vTextureCoord[1] < 0.15 || vTextureCoord[1] > 0.85){
             color = vec4(1.0, 1.0, 1.0, 0.0);
-        }       
+        }     
        }
        else if(value < 0.7){
-           color = vec4(0.3, 0.5, 0.0, 1.0);;
+           color = vec4(0.3, 0.4, 0.0, 1.0);;
            
        }
        else if(value < 0.75){
-           color = vec4(0.4, 0.5, 0.0, 1.0);;
+           color = vec4(0.2, 0.3, 0.0, 1.0);;
            
        }
        else{
@@ -321,8 +321,8 @@ ShadedTriangleMesh.prototype.render = function(gl, model, view, projection) {
 
     
     var time = gl.getUniformLocation(this.shaderProgram, "time");
-    gl.uniform1f(time, Date.now());
-    //console.log(Math.sin(Date.now()));
+    gl.uniform1i(time, Date.now());
+    // console.log(Date.now());
 
 
     // var texcoordLocation = gl.getAttribLocation(program, "a_texcoords");
@@ -463,7 +463,7 @@ var Task2 = function(gl) {
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
               new Uint8Array([0, 0, 255, 255]));
     var image3 = new Image();
-    image3.src = "value.png";
+    image3.src = "value1.png";
     image3.addEventListener('load', function() {
         // Now that the image has loaded make copy it to the texture.
         gl.bindTexture(gl.TEXTURE_2D, valueTexture);
@@ -511,10 +511,10 @@ Task2.prototype.render = function(gl, w, h) {
     var view =
         Matrix.translate(0, 0, -5).multiply(
         Matrix.rotate(this.cameraAngle, 1, 0, 0));
-    var rotation = Matrix.rotate(Date.now()/100, 0.4327, 1, 0);
+    var rotation = Matrix.rotate(Date.now()/100, 0.2327, 1, 0);
     var cubeModel = Matrix.translate(-3.8, 2, 0).multiply(rotation).multiply(Matrix.scale(0.3, 0.3, 0.3));
     var sphereModel = Matrix.translate(-1.8, 0, 0).multiply(rotation).multiply(Matrix.scale(1.2, 1.2, 1.2));
-    var sphereModel2 = Matrix.translate(1.8, 0, 0).multiply(rotation).multiply(Matrix.scale(1.1, 1.1, 1.1));
+    var sphereModel2 = Matrix.translate(1.8, 0, 0).multiply(rotation).multiply(Matrix.scale(1.5, 1.5, 1.5));
 
     //this.sphereMesh.render(gl, sphereModel2, view, projection);
     this.earthMesh.render(gl, sphereModel, view, projection, this.earthTexture);

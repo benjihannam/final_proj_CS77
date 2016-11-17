@@ -18,7 +18,7 @@ var TextureCoordinateData = [];
             var y = Math.cos(theta);
             var z = Math.sin(phi)*Math.sin(theta);
 
-            var v = 1 - (i / NumThetaBands);
+            var v = (i / NumThetaBands);
             var u = 1 - (j / NumPhiBands);
 
             TSpherePositions.push(x);
