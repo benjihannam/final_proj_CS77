@@ -126,7 +126,8 @@ TriangleMesh.prototype.render = function(gl, model, view, projection) {
 
 var Task1 = function(gl) {
     this.cameraAngle = 0;
-    this.mesh = new TriangleMesh(gl, CubePositions, CubeIndices, WhiteVertexSource, WhiteFragmentSource);
+    //this.mesh = new TriangleMesh(gl, CubePositions, CubeIndices, WhiteVertexSource, WhiteFragmentSource);
+    this.sphereMesh = new ShadedTriangleMesh(gl, SpherePositions, SphereNormals, SphereIndices, PhongVertexSource, PhongFragmentSource);
 
     gl.enable(gl.DEPTH_TEST);
 }
@@ -141,7 +142,14 @@ Task1.prototype.render = function(gl, w, h) {
         Matrix.rotate(this.cameraAngle, 1, 0, 0));
     var model = Matrix.rotate(Date.now()/25, 0, 1, 0);
 
-    this.mesh.render(gl, model, view, projection);
+    //this.mesh.render(gl, model, view, projection);
+    var rotation = Matrix.rotate(Date.now()/100, 0.4327, 1, 0);
+
+    var sphereModel = Matrix.translate(-1.8, 0, 0).multiply(rotation).multiply(Matrix.scale(1.2, 1.2, 1.2));
+
+    this.sphereMesh.render(gl, sphereModel, view, projection);
+
+
 }
 
 Task1.prototype.dragCamera = function(dy) {
