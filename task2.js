@@ -159,8 +159,8 @@ var ValueVertexSource = `
 var ValueFragmentSource = `
     precision mediump float;
 
-    const vec3 LightPosition = vec3(4.0, -4.0, 10.0);
-    const vec3 LightIntensity = vec3(400.0);
+    const vec3 LightPosition = vec3(5.0, 0.0, 100.0);
+    const vec3 LightIntensity = vec3(40000.0);
     uniform mat4 ViewInverse;
     uniform mat4 ModelInverse;
     const float n = 60.0;
@@ -205,24 +205,44 @@ var ValueFragmentSource = `
         value = value / 128.0 + 10.0 * time;
 
         vec4 color = vec4(value, value, value, 1.0);
-        if(value < 0.2){
+        if(value < 0.1){
             color = vec4(0.0, 0.0, 0.5, 1.0);
             ks = vec3(0.1);
         }
+        else if(value < 0.2){
+           color = vec4(0.0, 0.0, 0.6, 1.0);
+           ks = vec3(0.1);
+       }
+       else if(value < 0.3){
+           color = vec4(0.0, 0.0, 0.7, 1.0);
+           ks = vec3(0.1);
+       }
+       else if(value < 0.35){
+           color = vec4(0.0, 0.0, 0.8, 1.0);
+           ks = vec3(0.1);
+       }
         else if(value < 0.4){
            color = vec4(0.0, 0.0, 1.0, 1.0);
            ks = vec3(0.1);
        }
-       else if(value < 0.42){
-           color = vec4(0.0, 1.0, 1.0, 1.0);
-           ks = vec3(0.1);
-       }
-       else if(value < 0.8){
+       // else if(value < 0.42){
+       //     color = vec4(0.0, 1.0, 1.0, 1.0);
+       //     ks = vec3(0.1);
+       // }
+       else if(value < 0.6){
            color = vec4(0.0, 0.5, 0.0, 1.0);;
            
        }
+       else if(value < 0.7){
+           color = vec4(0.3, 0.5, 0.0, 1.0);;
+           
+       }
+       else if(value < 0.80){
+           color = vec4(0.4, 0.5, 0.0, 1.0);;
+           
+       }
        else{
-           color = vec4(0.5, 0.4, 0.1, 1.0);;
+           color = vec4(1.0, 1.0, 1.0, 1.0);;
        }
 
          //calculate the light components
