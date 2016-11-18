@@ -6,7 +6,7 @@ var Task6 = function(gl) {
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
               new Uint8Array([0, 0, 255, 255]));
     var image = new Image();
-    image.src = "moon.gif";
+    image.src = "value1.png";
     image.addEventListener('load', function() {
         // Now that the image has loaded make copy it to the texture.
         gl.bindTexture(gl.TEXTURE_2D, moonTexture);
@@ -27,23 +27,8 @@ var Task6 = function(gl) {
         gl.generateMipmap(gl.TEXTURE_2D);
       });
 
-    var earthTexture = gl.createTexture();
-    gl.bindTexture(gl.TEXTURE_2D, earthTexture);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
-              new Uint8Array([0, 0, 255, 255]));
-    var image2 = new Image();
-    image2.src = "earthnasa.png";
-    image2.addEventListener('load', function() {
-        // Now that the image has loaded make copy it to the texture.
-        gl.bindTexture(gl.TEXTURE_2D, earthTexture);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image2);
-        gl.generateMipmap(gl.TEXTURE_2D);
-      });
-
-
 
     this.moonTexture = moonTexture;
-    this.earthTexture = earthTexture;
     this.valueTexture = valueTexture;
 
 
@@ -53,9 +38,9 @@ var Task6 = function(gl) {
 
     this.mesh1 = new MoonTriangleMesh(gl, moonTexture, TextureCoordinateData, TSpherePositions, TSphereNormals, TSphereIndices, MoonVertexSource, MoonFragmentSource);
     this.mesh2 = new MoonTriangleMesh(gl, moonTexture, TextureCoordinateData, TSpherePositions, TSphereNormals, TSphereIndices, MoonVertexSource, MoonFragmentSource);
-    this.mesh3 = new MoonTriangleMesh(gl, moonTexture, TextureCoordinateData, TSpherePositions, TSphereNormals, TSphereIndices, MoonVertexSource, ValueFragmentSource);
-    this.mesh4 = new MoonTriangleMesh(gl, moonTexture, TextureCoordinateData, TSpherePositions, TSphereNormals, TSphereIndices, MoonVertexSource, ValueFragmentSource);
-    this.mesh5 = new MoonTriangleMesh(gl, moonTexture, TextureCoordinateData, TSpherePositions, TSphereNormals, TSphereIndices, MoonVertexSource, ValueFragmentSource);
+    this.mesh3 = new MoonTriangleMesh(gl, moonTexture, TextureCoordinateData, TSpherePositions, TSphereNormals, TSphereIndices, MoonVertexSource, ValueInterpFragmentSource);
+    this.mesh4 = new MoonTriangleMesh(gl, moonTexture, TextureCoordinateData, TSpherePositions, TSphereNormals, TSphereIndices, MoonVertexSource, ValueInitColorsFragmentSource);
+    this.mesh5 = new MoonTriangleMesh(gl, moonTexture, TextureCoordinateData, TSpherePositions, TSphereNormals, TSphereIndices, MoonVertexSource, ValueSpecularFragmentSource);
     this.mesh6 = new MoonTriangleMesh(gl, moonTexture, TextureCoordinateData, TSpherePositions, TSphereNormals, TSphereIndices, MoonVertexSource, ValueFragmentSource);
     this.mesh7 = new MoonTriangleMesh(gl, moonTexture, TextureCoordinateData, TSpherePositions, TSphereNormals, TSphereIndices, MoonVertexSource, ValueFragmentSource);
 
@@ -92,10 +77,10 @@ Task6.prototype.render = function(gl, w, h) {
     //this.earthMesh.render(gl, sphereModel, view, projection, this.earthTexture);
     this.mesh1.render(gl, sphere1, view, projection, this.moonTexture);
     this.mesh2.render(gl, sphere2, view, projection, this.moonTexture);
-    this.mesh3.render(gl, sphere3, view, projection, this.moonTexture);
-    this.mesh4.render(gl, sphere4, view, projection, this.moonTexture);
-    this.mesh5.render(gl, sphere5, view, projection, this.moonTexture);
-    this.mesh6.render(gl, sphere6, view, projection, this.moonTexture);
+    this.mesh3.render(gl, sphere3, view, projection, this.valueTexture);
+    this.mesh4.render(gl, sphere4, view, projection, this.valueTexture);
+    this.mesh5.render(gl, sphere5, view, projection, this.valueTexture);
+    this.mesh6.render(gl, sphere6, view, projection, this.valueTexture);
     //this.cubeMesh.render(gl, cubeModel, view, projection);
 
 
