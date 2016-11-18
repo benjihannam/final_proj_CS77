@@ -503,10 +503,10 @@ var ValueFragmentSource = `
            vec3 green = vec3(0.223, 0.462, 0.156);
            color = vec4(mix(light_blue, green, 0.8), 1.0);
        }
-       else if(value < 0.75){
+       else if(value < 0.80){
            vec3 brown = vec3(0.392, 0.333, 0.184);
            vec3 green = vec3(0.223, 0.462, 0.156);
-           color = vec4(mix(green, brown, (value-0.5)*1.0/0.25), 1.0);
+           color = vec4(mix(green, brown, (value-0.5)*1.0/0.3), 1.0);
            if(vTextureCoord[1] < 0.15 || vTextureCoord[1] > 0.85){
             color = vec4(0.86, 0.86, 0.86, 0.0);
             }
@@ -982,8 +982,8 @@ Task2.prototype.render = function(gl, w, h) {
         Matrix.rotate(this.cameraAngle, 1, 0, 0));
     var rotation = Matrix.rotate(Date.now()/100, 0.2327, 1, 0);
     var cubeModel = Matrix.translate(-3.8, 2, 0).multiply(rotation).multiply(Matrix.scale(0.3, 0.3, 0.3));
-    var sphereModel = Matrix.translate(-1.8, 0, 0).multiply(rotation).multiply(Matrix.scale(1.2, 1.2, 1.2));
-    var sphereModel2 = Matrix.translate(1.8, 0, 0).multiply(rotation).multiply(Matrix.scale(1.5, 1.5, 1.5));
+    var sphereModel = Matrix.translate(-2.0, 0, 0).multiply(rotation).multiply(Matrix.scale(1.5, 1.5, 1.5));
+    var sphereModel2 = Matrix.translate(2.0, 0, 0).multiply(rotation).multiply(Matrix.scale(1.5, 1.5, 1.5));
 
     //this.sphereMesh.render(gl, sphereModel2, view, projection);
     this.earthMesh.render(gl, sphereModel, view, projection, this.earthTexture);
