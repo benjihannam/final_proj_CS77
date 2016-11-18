@@ -1,73 +1,39 @@
-var Bone = function(parent, position, scale, jointLocation, jointAxis) {
-    this.parent = parent;
-    this.position = position;
-    this.scale = scale;
-    this.jointLocation = jointLocation;
-    this.jointAxis = jointAxis;
-    this.jointAngle = 0;
-}
-
-Bone.prototype.setJointAngle = function(angle) {
-    this.jointAngle = angle;
-}
-Bone.prototype.computePoseMatrix = function() {
-    // TODO: Compute the pose matrix of this point (i.e. transformation matrix
-    //       with translation+rotation, but no scaling) and return it.
-    //       The matrix should translate by this.position and rotate around this.jointAxis
-    //       at this.jointLocation by this.jointAngle
-    
-    //       If this.parent is not null, you should also apply the pose matrix of the parent
-    //       to get a hierarchical transform
-    var trans = Matrix.translate(this.position[0], this.position[1], this.position[2]);
-    var axis_rotate = rotateAroundAxisAtPoint(this.jointAxis, this.jointAngle, this.jointLocation);
-    var pose_matrix = trans.multiply(axis_rotate);
-    if (this.parent != null) {
-        pose_matrix = (this.parent.computePoseMatrix()).multiply(pose_matrix);
-    }
-    return pose_matrix;
-}
-Bone.prototype.computeModelMatrix = function() {
-    // TODO: Compute the model matrix of this bone (i.e. pose matrix + scaling)
-    //       and return it.
-    //       Use this.computePoseMatrix and this.scale to build the matrix
-
-    var pose_mat = this.computePoseMatrix();
-    var scale_mat = Matrix.scale(this.scale[0], this.scale[1], this.scale[2]);
-    return pose_mat.multiply(scale_mat);
-}
-
 var Task4 = function(gl) {
     this.cameraAngle = 0;
-    this.mesh = new ShadedTriangleMesh(gl, CubePositions, CubeNormals, CubeIndices, PhongVertexSource, PhongFragmentSource);
-    
-    var hip       = new Bone(     null, [0,    1.5, 0  ], [0.5,  0.3, 0.2], [0, 0,    0   ], [0, 1, 0]);
-    var leftThigh = new Bone(      hip, [0.5, -1.1, 0.1], [0.1,  0.7, 0.1], [0, 0.7,  0   ], [1, 0, 0]);
-    var leftShin  = new Bone(leftThigh, [0,   -1.5, 0  ], [0.1,  0.7, 0.1], [0, 0.7,  0   ], [1, 0, 0]);
-    var leftFoot  = new Bone( leftShin, [0,   -0.9, 0.2], [0.15, 0.1, 0.3], [0, 0.1, -0.25], [1, 0, 0]);
-    
-    this.bones = [hip, leftThigh, leftShin, leftFoot];
-    
-    gl.enable(gl.DEPTH_TEST);
-}
+    this.sphereMesh = new ShadedTriangleMesh(gl, SpherePositions, SphereNormals, SphereIndices, SunVertexSource, SunFragmentSource);
+    this.cubeMesh = new ShadedTriangleMesh(gl, CubePositions, CubeNormals, CubeIndices, PhongVertexSource, PhongFragmentSource);
 
-Task4.prototype.setJointAngle = function(boneIndex, angle) {
-    this.bones[boneIndex].setJointAngle(angle);
+    gl.enable(gl.DEPTH_TEST);
 }
 
 Task4.prototype.render = function(gl, w, h) {
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    
-    var projection = Matrix.perspective(60, w/h, 0.1, 100);
+
+    var angle = Date.now()/50; // controls how fast it rotates
+    var projection = Matrix.perspective(35, w/h, 0.1, 100);
     var view =
-        Matrix.translate(0, 0, -5).multiply(
+        Matrix.translate(0, 0, -10).multiply(
         Matrix.rotate(this.cameraAngle, 1, 0, 0));
-    
-    for (var i = 0; i < this.bones.length; ++i) {
-        var model = this.bones[i].computeModelMatrix();
-        
-        this.mesh.render(gl, model, view, projection);
-    }
+
+    var rotation = Matrix.rotate(Date.now()/25, 0.4327, 1, 0);
+
+    var cubeModel = Matrix.translate(-4, 0, 0).multiply(rotation).multiply(
+        rotateAroundAxisAtPoint([1, 1, 0], angle, [0, 0, 0])).multiply(
+        Matrix.scale(0.2, 0.2, 0.2));
+
+    var earthModel = Matrix.translate(-0, 0, 0).multiply(
+        rotateAroundAxisAtPoint([1, 1, 0], angle, [0, 0, 0])).multiply(rotation).multiply(
+        Matrix.scale(0.9, 0.9, 0.9));
+
+    var moonModel = Matrix.translate(-2.5, 0, 0).multiply(
+        rotateAroundAxisAtPoint([0, 0, 1], angle, [3, 0, 0])).multiply(rotation).multiply( // point controls radius of rotation
+        Matrix.scale(0.3, 0.3, 0.3));
+
+    this.sphereMesh.render(gl, moonModel, view, projection);
+    this.sphereMesh.render(gl, earthModel, view, projection);
+
+    //this.cubeMesh.render(gl, cubeModel, view, projection);
 }
 
 Task4.prototype.dragCamera = function(dy) {

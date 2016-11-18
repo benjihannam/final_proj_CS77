@@ -11,35 +11,54 @@ function rotateAroundAxisAtPoint(axis, angle, point) {
     return res3.multiply(res2).multiply(res1);
 }
 
-var Task3 = function(gl) {
+var Task5 = function(gl) {
     this.cameraAngle = 0;
 
+
+    var starTexture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, starTexture);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+              new Uint8Array([0, 0, 255, 255]));
+    var image = new Image();
+    image.src = "space.png";
+    image.addEventListener('load', function() {
+        // Now that the image has loaded make copy it to the texture.
+        gl.bindTexture(gl.TEXTURE_2D, starTexture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image);
+        gl.generateMipmap(gl.TEXTURE_2D);
+      });
 
     var moonTexture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, moonTexture);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
               new Uint8Array([0, 0, 255, 255]));
-    var image = new Image();
-    image.src = "moon.gif";
-    image.addEventListener('load', function() {
+    var image2 = new Image();
+    image2.src = "moon.gif";
+    image2.addEventListener('load', function() {
         // Now that the image has loaded make copy it to the texture.
         gl.bindTexture(gl.TEXTURE_2D, moonTexture);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image2);
         gl.generateMipmap(gl.TEXTURE_2D);
       });
 
-    this.moonTexture = moonTexture;
-    this.moonMesh = new MoonTriangleMesh(gl, moonTexture, TextureCoordinateData, TSpherePositions, TSphereNormals, TSphereIndices, MoonVertexSource, MoonFragmentSource);
 
+    this.starTexture = starTexture;
+    this.moonTexture = moonTexture;
+
+    this.moonMesh = new MoonTriangleMesh(gl, moonTexture, TextureCoordinateData, TSpherePositions, TSphereNormals, TSphereIndices, MoonVertexSource, MoonFragmentSource);
 
     this.sphereMesh = new ShadedTriangleMesh(gl, SpherePositions, SphereNormals, SphereIndices, SunVertexSource, SunFragmentSource);
     this.cubeMesh = new ShadedTriangleMesh(gl, CubePositions, CubeNormals, CubeIndices, PhongVertexSource, PhongFragmentSource);
+
+    this.starMesh = new MoonTriangleMesh(gl, starTexture, TextureCoordinateData, TSpherePositions, TSphereNormals, TSphereIndices, MoonVertexSource, MoonFragmentSource);
+
+    this.cubeStarMesh = new MoonTriangleMesh(gl, starTexture, CubeTextureCoordinates, CubePositions, CubeNormals, CubeIndices, MoonVertexSource, MoonFragmentSource);
 
 
     gl.enable(gl.DEPTH_TEST);
 }
 
-Task3.prototype.render = function(gl, w, h) {
+Task5.prototype.render = function(gl, w, h) {
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
@@ -66,12 +85,18 @@ Task3.prototype.render = function(gl, w, h) {
     var sunModel = Matrix.translate(-0, 0, 0).multiply(rotation).multiply(
         Matrix.scale(0.9, 0.9, 0.9));
 
+    var starModel = Matrix.translate(-0, 0, 0).multiply(
+        Matrix.scale(10, 10, 10));
+
     this.moonMesh.render(gl, moonModel, view, projection, this.moonTexture);
+    //this.starMesh.render(gl, starModel, view, projection, this.starTexture);
     this.sphereMesh.render(gl, sunModel, view, projection);
 
-    //this.cubeMesh.render(gl, cubeModel, view, projection);
+    this.cubeMesh.render(gl, cubeModel, view, projection);
+
+    this.cubeStarMesh.render(gl, starModel, view, projection, this.starTexture);
 }
 
-Task3.prototype.dragCamera = function(dy) {
+Task5.prototype.dragCamera = function(dy) {
     this.cameraAngle = Math.min(Math.max(this.cameraAngle + dy*0.5, -90), 90);
 }
