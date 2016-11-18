@@ -10,8 +10,8 @@ var DTextureCoordinateData = [];
 
     for (var i = 0; i <= NumThetaBands; i++) {
         for (var j = 0; j <= NumPhiBands; j++) {
-            
-            var rand = Math.random();
+
+            var rand = Math.random()/30.0;
             var theta = (i/NumThetaBands)*Math.PI;
             var phi = 2*Math.PI*j/NumPhiBands;
 
@@ -23,7 +23,7 @@ var DTextureCoordinateData = [];
             var u = 1 - (j / NumPhiBands);
 
             DTSpherePositions.push(x);
-            DSpherePositions.push(y);
+            DTSpherePositions.push(y);
             DTSpherePositions.push(z);
             DTSphereNormals.push(x);
             DTSphereNormals.push(y);
