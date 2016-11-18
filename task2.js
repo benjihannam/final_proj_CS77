@@ -123,12 +123,12 @@ var SunFragmentSource = `
 
     void main() {
 
-        vec3 minimum = one[0] + 0.1*sin(time/158.0);
+        vec3 minimum = one[0] + 0.1*sin(time);;
         float min_d = (minimum[0] - vNormal[0])*(minimum[0] - vNormal[0]) + (minimum[1] - vNormal[1])*(minimum[1] - vNormal[1]) + (minimum[2] - vNormal[2])*(minimum[2] - vNormal[2]);
         float max_d = (minimum[0] - vNormal[0])*(minimum[0] - vNormal[0]) + (minimum[1] - vNormal[1])*(minimum[1] - vNormal[1]) + (minimum[2] - vNormal[2])*(minimum[2] - vNormal[2]);
         float poss = 0.0;
         for (int i = 0; i < 8; i++) {
-            vec3 other = one[i+1] + 0.1*sin(time/158.0);
+            vec3 other = one[i+1] + 0.1*sin(time);;
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -140,7 +140,7 @@ var SunFragmentSource = `
         // float abc = oh[0];
         // if (abc > -.22){
             for (int i = 0; i < 10; i++) {
-                vec3 other = two[i] + 0.1*sin(time/158.0) ;
+                vec3 other = two[i] + 0.1*sin(time); ;
                 poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
                 if (poss < min_d) {
                     min_d = poss;
@@ -152,7 +152,7 @@ var SunFragmentSource = `
         // float cbd = oh2[0];
         // if (cbd > 0.0) {
             for (int i = 0; i < 12; i++) {
-                vec3 other = three[i] + 0.1*sin(time/158.0) ;
+                vec3 other = three[i] + 0.1*sin(time); ;
                 poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
                 if (poss < min_d) {
                     min_d = poss;
@@ -161,7 +161,7 @@ var SunFragmentSource = `
             }
 
             for (int i = 0; i < 10; i++) {
-                vec3 other = four[i] + 0.1*sin(time/158.0) ;
+                vec3 other = four[i] + 0.1*sin(time); ;
                 poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
                 if (poss < min_d) {
                     min_d = poss;
@@ -169,7 +169,7 @@ var SunFragmentSource = `
             }
 
         for (int i = 0; i < 8; i++) {
-            vec3 other = five[i] + 0.1*sin(time/158.0) ;
+            vec3 other = five[i] + 0.1*sin(time); ;
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -177,7 +177,7 @@ var SunFragmentSource = `
 
         }
         for (int i = 0; i < 10; i++) {
-            vec3 other = six[i] + 0.1*sin(time/158.0) ;
+            vec3 other = six[i] + 0.1*sin(time); ;
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -186,7 +186,7 @@ var SunFragmentSource = `
         }
         // if (cbd > 0.0) {
             for (int i = 0; i < 12; i++) {
-                vec3 other = seven[i] + 0.1*sin(time/158.0) ;
+                vec3 other = seven[i] + 0.1*sin(time); ;
                 poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
                 if (poss < min_d) {
                     min_d = poss;
@@ -197,7 +197,7 @@ var SunFragmentSource = `
             }
         // }
         for (int i = 0; i < 8; i++) {
-            vec3 other = eight[i] + 0.1*sin(time/158.0)  ;
+            vec3 other = eight[i] + 0.1*sin(time);  ;
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -205,7 +205,7 @@ var SunFragmentSource = `
 
         }
         for (int i = 0; i <11; i++) {
-            vec3 other = nine[i] + 0.1*sin(time/158.0)  ;
+            vec3 other = nine[i] + 0.1*sin(time);  ;
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -213,7 +213,7 @@ var SunFragmentSource = `
 
         }
         for (int i = 0; i < 7; i++) {
-            vec3 other = ten[i]  + 0.1*sin(time/158.0) ;
+            vec3 other = ten[i]  + 0.1*sin(time); ;
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -221,7 +221,7 @@ var SunFragmentSource = `
 
         }
         for (int i = 0; i < 9; i++) {
-            vec3 other = elev[i] + 0.1*sin(time/158.0) ;
+            vec3 other = elev[i] + 0.1*sin(time); ;
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -229,7 +229,7 @@ var SunFragmentSource = `
 
         }
         for (int i = 0; i < 10; i++) {
-            vec3 other = twel[i] + 0.1*sin(time/158.0) ;
+            vec3 other = twel[i] + 0.1*sin(time); ;
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -237,7 +237,7 @@ var SunFragmentSource = `
 
         }
         for (int i = 0; i < 7; i++) {
-            vec3 other = thirt[i] + 0.1*sin(time/158.0) ;
+            vec3 other = thirt[i] + 0.1*sin(time); ;
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -245,7 +245,7 @@ var SunFragmentSource = `
 
         }
         for (int i = 0; i < 8; i++) {
-            vec3 other = fourt[i] + 0.1*sin(time/158.0) ;
+            vec3 other = fourt[i] + 0.1*sin(time); ;
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -253,7 +253,7 @@ var SunFragmentSource = `
 
         }
         for (int i = 0; i < 8; i++) {
-            vec3 other = fift[i] + 0.1*sin(time/158.0) ;
+            vec3 other = fift[i] + 0.1*sin(time); ;
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -261,7 +261,7 @@ var SunFragmentSource = `
 
         }
         for (int i = 0; i < 7; i++) {
-            vec3 other = sixt[i] + 0.1*sin(time/158.0) ;
+            vec3 other = sixt[i] + 0.1*sin(time); ;
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -269,7 +269,7 @@ var SunFragmentSource = `
 
         }
         for (int i = 0; i < 9; i++) {
-            vec3 other = sevent[i] + 0.1*sin(time/158.0) ;
+            vec3 other = sevent[i] + 0.1*sin(time); ;
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -277,7 +277,7 @@ var SunFragmentSource = `
 
         }
         for (int i = 0; i < 8; i++) {
-            vec3 other = eighte[i] + 0.1*sin(time/158.0) ;
+            vec3 other = eighte[i] + 0.1*sin(time); ;
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -285,7 +285,7 @@ var SunFragmentSource = `
 
         }
         for (int i = 0; i < 7; i++) {
-            vec3 other = ninet[i] + 0.1*sin(time/158.0) ;
+            vec3 other = ninet[i] + 0.1*sin(time); ;
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -293,7 +293,7 @@ var SunFragmentSource = `
 
         }
         for (int i = 0; i < 9; i++) {
-            vec3 other = twenty[i] + 0.1*sin(time/158.0) ;
+            vec3 other = twenty[i] + 0.1*sin(time); ;
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -301,7 +301,7 @@ var SunFragmentSource = `
 
         }
         for (int i = 0; i < 14; i++) {
-            vec3 other = tweno[i] + 0.1*sin(time/158.0) ;
+            vec3 other = tweno[i] + 0.1*sin(time); ;
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -309,7 +309,7 @@ var SunFragmentSource = `
 
         }
         for (int i = 0; i < 8; i++) {
-            vec3 other = twent[i] + 0.1*sin(time/158.0) ;
+            vec3 other = twent[i] + 0.1*sin(time); ;
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -317,7 +317,7 @@ var SunFragmentSource = `
 
         }
         for (int i = 0; i < 8; i++) {
-            vec3 other = twenth[i] + 0.1*sin(time/158.0) ;
+            vec3 other = twenth[i] + 0.1*sin(time); ;
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -325,7 +325,7 @@ var SunFragmentSource = `
 
         }
         for (int i = 0; i < 7; i++) {
-            vec3 other = twenf[i] + 0.1*sin(time/158.0) ;
+            vec3 other = twenf[i] + 0.1*sin(time); ;
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -333,7 +333,7 @@ var SunFragmentSource = `
 
         }
         for (int i = 0; i < 9; i++) {
-            vec3 other = twenfi[i] + 0.1*sin(time/158.0) ;
+            vec3 other = twenfi[i] + 0.1*sin(time); ;
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -776,9 +776,8 @@ ShadedTriangleMesh.prototype.render = function(gl, model, view, projection) {
     // console.log(t);
     var d = new Date();
     var t = d.getMilliseconds();
-    //console.log()
-    // console.log(Math.sin(t /158.0));
-    gl.uniform1f(time, t);
+    var t1 = d.getSeconds();
+    gl.uniform1f(time, t/1000.0 + t1);
 
     // var time = gl.getUniformLocation(this.shaderProgram, "time");
     // var t = Date.now()/2.0;
