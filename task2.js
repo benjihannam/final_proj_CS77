@@ -478,7 +478,45 @@ var ValueFragmentSource = `
 
     void main() {
 
-        //get the light vector and the eye vector
+        vec3 ks = vec3(0.0);
+
+        float value = 0.0;
+        float size = 64.0;
+        float init_size = 64.0;
+        for(int i = 0; i < 6; i++){
+            value += (texture2D(uSampler, vTextureCoord/size))[0] * size;
+            size = size / 2.0;
+        }
+        value = value / 128.0;
+
+        vec4 color = vec4(value, value, value, 1.0);
+        if(value < 0.5){
+            vec3 dark_blue = vec3(0.0, 0.0, 0.05);
+           vec3 light_blue = vec3(0.0, 0.0, 0.2);
+           color = vec4(mix(dark_blue, light_blue, value * 2.0), 1.0);
+           ks = vec3(0.17);
+           
+
+       }
+       else if (value < 0.51){
+           vec3 light_blue = vec3(0.0, 0.0, 0.5);
+           vec3 green = vec3(0.223, 0.462, 0.156);
+           color = vec4(mix(light_blue, green, 0.8), 1.0);
+       }
+       else if(value < 0.75){
+           vec3 brown = vec3(0.392, 0.333, 0.184);
+           vec3 green = vec3(0.223, 0.462, 0.156);
+           color = vec4(mix(green, brown, (value-0.5)*1.0/0.25), 1.0);
+           if(vTextureCoord[1] < 0.15 || vTextureCoord[1] > 0.85){
+            color = vec4(0.86, 0.86, 0.86, 0.0);
+            }
+
+       }
+       else{
+           color = vec4(0.86, 0.86, 0.86, 0.0);
+       }
+
+       //get the light vector and the eye vector
         vec3 l = LightPosition - vec3(globalPosition);
         vec3 view_direction = vec3(ViewInverse * vec4(0.0, 0.0, 0.0,1.0))  - vec3(globalPosition);
 
@@ -495,65 +533,6 @@ var ValueFragmentSource = `
 
         //get the amount of incident light falling on the point
         vec3 incident_light = LightIntensity / pow(length(l), 2.0);
-
-
-        vec3 ks = vec3(0.0);
-
-        float value = 0.0;
-        float size = 64.0;
-        float init_size = 64.0;
-        for(int i = 0; i < 6; i++){
-            value += (texture2D(uSampler, vTextureCoord/size))[0] * size;
-            size = size / 2.0;
-        }
-        value = value / 128.0;
-
-        vec4 color = vec4(value, value, value, 1.0);
-        if(value < 0.1){
-            color = vec4(0.0, 0.0, 0.1, 1.0);
-            ks = vec3(0.05);
-
-        }
-        else if(value < 0.2){
-           color = vec4(0.0, 0.0, 0.1, 1.0);
-           ks = vec3(0.07);
-
-       }
-       else if(value < 0.3){
-           color = vec4(0.0, 0.0, 0.2, 1.0);
-           ks = vec3(0.1);
-           if(vTextureCoord[1] < 0.15 || vTextureCoord[1] > 0.85){
-            color = vec4(1.0, 1.0, 1.0, 0.0);
-            }
-       }
-       else if(value < 0.35){
-           color = vec4(0.0, 0.0, 0.25, 1.0);
-           ks = vec3(0.15);
-
-       }
-        else if(value < 0.5){
-           color = vec4(0.0, 0.0, 0.3, 1.0);
-           ks = vec3(0.17);
-
-       }
-       else if(value < 0.6){
-        color = vec4(0.0, 0.4, 0.0, 1.0);
-        //at the poles
-        if(vTextureCoord[1] < 0.15 || vTextureCoord[1] > 0.85){
-            color = vec4(1.0, 1.0, 1.0, 0.0);
-        }
-       }
-       else if(value < 0.7){
-           color = vec4(0.3, 0.4, 0.0, 1.0);;
-
-       }
-       else if(value < 0.75){
-           color = vec4(0.2, 0.3, 0.0, 1.0);;
-
-       }
-       else{
-           color = vec4(1.0, 1.0, 1.0, 1.0);;
-       }
 
          //calculate the light components
         vec3 spec_light = ks * incident_light * pow(n_dot_h, n);
@@ -874,6 +853,16 @@ MoonTriangleMesh.prototype.render = function(gl, model, view, projection, tex) {
     gl.uniformMatrix4fv(modelInverseMatrix, false, model.inverse().m);
 
     var samplerUniform = gl.getUniformLocation(this.shaderProgram, "uSampler");
+
+    var time = gl.getUniformLocation(this.shaderProgram, "time");
+    // var t = Date.now()/2.0;
+    // console.log("ther");
+    // console.log(t);
+    var d = new Date();
+    var t = d.getMilliseconds();
+    //console.log()
+    // console.log(Math.sin(t /158.0));
+    gl.uniform1f(time, t);
 
     // can pass time directly to fragment shader to move texture around (sin + position or something)
 

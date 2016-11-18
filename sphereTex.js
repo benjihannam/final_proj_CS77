@@ -5,8 +5,8 @@ var TextureCoordinateData = [];
 
 (function() {
 
-    var NumPhiBands = 30;
-    var NumThetaBands = 30;
+    var NumPhiBands = 100;
+    var NumThetaBands = 100;
 
     for (var i = 0; i <= NumThetaBands; i++) {
         for (var j = 0; j <= NumPhiBands; j++) {

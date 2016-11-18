@@ -4,7 +4,7 @@ var SphereIndices = [];
 // var worley = [2.0, 3.0];
 
 (function() {
-    var NumPhiBands = 30;
+    var NumPhiBands = 100;
     var NumThetaBands = NumPhiBands/2;
 
     for (var i = 0; i <= NumThetaBands; ++i) {
