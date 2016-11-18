@@ -11,13 +11,12 @@ var DTextureCoordinateData = [];
     for (var i = 0; i <= NumThetaBands; i++) {
         for (var j = 0; j <= NumPhiBands; j++) {
 
-            var rand = Math.random()/30.0;
             var theta = (i/NumThetaBands)*Math.PI;
             var phi = 2*Math.PI*j/NumPhiBands;
 
-            var x = Math.cos(phi)*Math.sin(theta) + rand;
-            var y = Math.cos(theta)+ rand;
-            var z = Math.sin(phi)*Math.sin(theta)+ rand;
+            var x = Math.cos(phi)*Math.sin(theta) + Math.random()/25.0;
+            var y = Math.cos(theta)+ Math.random()/25.0;
+            var z = Math.sin(phi)*Math.sin(theta)+ Math.random()/25.0;
 
             var v = (i / NumThetaBands);
             var u = 1 - (j / NumPhiBands);
