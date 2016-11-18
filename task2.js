@@ -145,6 +145,8 @@ var SunFragmentSource = `
         // if (abc > -.22){
             for (int i = 0; i < 10; i++) {
                 vec3 other = two[i] ;
+                other[0] += 0.1*sin(time);
+                other[1] -= 0.1*cos(time);
                 poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
                 if (poss < min_d) {
                     min_d = poss;
@@ -168,6 +170,8 @@ var SunFragmentSource = `
 
             for (int i = 0; i < 10; i++) {
                 vec3 other = four[i] ;
+                other[0] += 0.1*sin(time);
+                other[1] -= 0.1*cos(time);
                 poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
                 if (poss < min_d) {
                     min_d = poss;
@@ -186,6 +190,8 @@ var SunFragmentSource = `
         }
         for (int i = 0; i < 10; i++) {
             vec3 other = six[i] ;
+            other[0] += 0.1*sin(time);
+            other[1] -= 0.1*cos(time);
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -206,6 +212,8 @@ var SunFragmentSource = `
         // }
         for (int i = 0; i < 8; i++) {
             vec3 other = eight[i]  ;
+            other[0] += 0.1*sin(time);
+            other[1] -= 0.1*cos(time);
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -224,6 +232,8 @@ var SunFragmentSource = `
         }
         for (int i = 0; i < 7; i++) {
             vec3 other = ten[i]  ;
+            other[0] += 0.1*sin(time);
+            other[1] -= 0.1*cos(time);
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -242,6 +252,8 @@ var SunFragmentSource = `
         }
         for (int i = 0; i < 10; i++) {
             vec3 other = twel[i] ;
+            other[0] += 0.1*sin(time);
+            other[1] -= 0.1*cos(time);
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -260,6 +272,8 @@ var SunFragmentSource = `
         }
         for (int i = 0; i < 8; i++) {
             vec3 other = fourt[i] ;
+            other[0] += 0.1*sin(time);
+            other[1] -= 0.1*cos(time);
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -278,6 +292,8 @@ var SunFragmentSource = `
         }
         for (int i = 0; i < 7; i++) {
             vec3 other = sixt[i] ;
+            other[0] += 0.1*sin(time);
+            other[1] -= 0.1*cos(time);
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -296,6 +312,8 @@ var SunFragmentSource = `
         }
         for (int i = 0; i < 8; i++) {
             vec3 other = eighte[i] ;
+            other[0] += 0.1*sin(time);
+            other[1] -= 0.1*cos(time);
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -314,6 +332,8 @@ var SunFragmentSource = `
         }
         for (int i = 0; i < 9; i++) {
             vec3 other = twenty[i] ;
+            other[0] += 0.1*sin(time);
+            other[1] -= 0.1*cos(time);
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -332,6 +352,8 @@ var SunFragmentSource = `
         }
         for (int i = 0; i < 8; i++) {
             vec3 other = twent[i] ;
+            other[0] += 0.1*sin(time);
+            other[1] -= 0.1*cos(time);
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -350,6 +372,8 @@ var SunFragmentSource = `
         }
         for (int i = 0; i < 7; i++) {
             vec3 other = twenf[i] ;
+            other[0] += 0.1*sin(time);
+            other[1] -= 0.1*cos(time);
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
