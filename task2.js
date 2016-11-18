@@ -1,4 +1,59 @@
 var PhongVertexSource = `
+    uniform mat4 ModelViewProjection;
+    uniform mat4 Model;
+    attribute vec3 Position;
+    attribute vec3 Normal;
+    varying vec3 vNormal;
+    varying vec4 globalPosition;
+    void main() {
+        gl_Position = ModelViewProjection * vec4(Position, 1.0);
+        globalPosition = Model * vec4(Position, 1.0);
+        vNormal = Normal;
+    }
+`;
+
+var PhongFragmentSource = `
+    precision highp float;
+    // one output of gl_Fragcolor- default output
+    const vec3 LightPosition = vec3(4.0, -4.0, 10.0);
+    const vec3 LightIntensity = vec3(400.0);
+    const vec3 ka = 0.3*vec3(1.0, 0.5, 0.5);
+  //  const vec3 kd = 0.7*vec3(1.0, 0.5, 0.5);
+    const vec3 kd = 0.7*vec3(0.5, 0.7, 0.7);
+    const vec3 ks = vec3(0.4);
+    const float n = 60.0; //phong exponent
+    varying vec4 globalPosition;
+    varying vec3 vNormal;
+    uniform mat4 ViewInverse;
+    uniform mat4 ModelInverse;
+    void main() {
+        float roughness = 0.5;
+        const float PI = 3.14159;
+        vec3 l = LightPosition - vec3(globalPosition);
+        vec3 camera_loc = vec3(ViewInverse * vec4(0.0, 0.0, 0.0, 0.0));
+        vec3 norm = vec3(ModelInverse * vec4(vNormal, 0.0)); //should be 0
+        float cosine = dot(normalize(norm), normalize(l));
+        float n_dot_l = dot(normalize(norm), normalize(l));
+        float n_dot_v = dot(normalize(norm), normalize(camera_loc));
+        float ang_vn = acos(n_dot_v);
+        float ang_ln = acos(n_dot_l);
+        float alpha = max(ang_vn, ang_ln);
+        float beta = min(ang_vn, ang_ln);
+        float A = 1.0 - 0.5*(roughness*roughness / (roughness*roughness + 0.57));
+        float B = 0.45*(roughness*roughness / (roughness*roughness + 0.09));
+        vec3 incident_light = LightIntensity / pow(length(l), 2.0); //this is the irradiance, albedo is kd
+        cosine = max(0.0, cosine);
+        vec3 lambert = kd * cosine * incident_light;
+        float dotted = (1.0/PI) * cos(ang_ln) * (A + (B * sin(alpha) * sin(beta) * 0.5));
+        vec3 L_r = kd * dotted * incident_light;
+        gl_FragColor = vec4(L_r, 1.0);
+    }
+`;
+
+
+
+
+var SunVertexSource = `
 
     uniform mat4 ModelViewProjection;
     uniform mat4 Model;
@@ -18,7 +73,7 @@ var PhongVertexSource = `
     }
 `;
 
-var PhongFragmentSource = `
+var SunFragmentSource = `
     precision highp float;
     // one output of gl_Fragcolor- default output
     // float cell(vec3 pos) {
@@ -78,7 +133,7 @@ var PhongFragmentSource = `
             if (poss < min_d) {
                 min_d = poss;
             }
-             
+
 
         }
         // vec3 oh = two[0];
@@ -102,7 +157,7 @@ var PhongFragmentSource = `
                 if (poss < min_d) {
                     min_d = poss;
                 }
-                
+
             }
 
             for (int i = 0; i < 10; i++) {
@@ -119,7 +174,7 @@ var PhongFragmentSource = `
             if (poss < min_d) {
                 min_d = poss;
             }
-             
+
         }
         for (int i = 0; i < 10; i++) {
             vec3 other = six[i] + 0.1*sin(time/158.0) ;
@@ -127,7 +182,7 @@ var PhongFragmentSource = `
             if (poss < min_d) {
                 min_d = poss;
             }
-             
+
         }
         // if (cbd > 0.0) {
             for (int i = 0; i < 12; i++) {
@@ -147,7 +202,7 @@ var PhongFragmentSource = `
             if (poss < min_d) {
                 min_d = poss;
             }
-             
+
         }
         for (int i = 0; i <11; i++) {
             vec3 other = nine[i] + 0.1*sin(time/158.0)  ;
@@ -155,7 +210,7 @@ var PhongFragmentSource = `
             if (poss < min_d) {
                 min_d = poss;
             }
-             
+
         }
         for (int i = 0; i < 7; i++) {
             vec3 other = ten[i]  + 0.1*sin(time/158.0) ;
@@ -163,7 +218,7 @@ var PhongFragmentSource = `
             if (poss < min_d) {
                 min_d = poss;
             }
-             
+
         }
         for (int i = 0; i < 9; i++) {
             vec3 other = elev[i] + 0.1*sin(time/158.0) ;
@@ -171,7 +226,7 @@ var PhongFragmentSource = `
             if (poss < min_d) {
                 min_d = poss;
             }
-             
+
         }
         for (int i = 0; i < 10; i++) {
             vec3 other = twel[i] + 0.1*sin(time/158.0) ;
@@ -179,7 +234,7 @@ var PhongFragmentSource = `
             if (poss < min_d) {
                 min_d = poss;
             }
-             
+
         }
         for (int i = 0; i < 7; i++) {
             vec3 other = thirt[i] + 0.1*sin(time/158.0) ;
@@ -187,7 +242,7 @@ var PhongFragmentSource = `
             if (poss < min_d) {
                 min_d = poss;
             }
-             
+
         }
         for (int i = 0; i < 8; i++) {
             vec3 other = fourt[i] + 0.1*sin(time/158.0) ;
@@ -195,7 +250,7 @@ var PhongFragmentSource = `
             if (poss < min_d) {
                 min_d = poss;
             }
-             
+
         }
         for (int i = 0; i < 8; i++) {
             vec3 other = fift[i] + 0.1*sin(time/158.0) ;
@@ -203,7 +258,7 @@ var PhongFragmentSource = `
             if (poss < min_d) {
                 min_d = poss;
             }
-             
+
         }
         for (int i = 0; i < 7; i++) {
             vec3 other = sixt[i] + 0.1*sin(time/158.0) ;
@@ -211,7 +266,7 @@ var PhongFragmentSource = `
             if (poss < min_d) {
                 min_d = poss;
             }
-             
+
         }
         for (int i = 0; i < 9; i++) {
             vec3 other = sevent[i] + 0.1*sin(time/158.0) ;
@@ -219,7 +274,7 @@ var PhongFragmentSource = `
             if (poss < min_d) {
                 min_d = poss;
             }
-             
+
         }
         for (int i = 0; i < 8; i++) {
             vec3 other = eighte[i] + 0.1*sin(time/158.0) ;
@@ -227,7 +282,7 @@ var PhongFragmentSource = `
             if (poss < min_d) {
                 min_d = poss;
             }
-             
+
         }
         for (int i = 0; i < 7; i++) {
             vec3 other = ninet[i] + 0.1*sin(time/158.0) ;
@@ -235,7 +290,7 @@ var PhongFragmentSource = `
             if (poss < min_d) {
                 min_d = poss;
             }
-             
+
         }
         for (int i = 0; i < 9; i++) {
             vec3 other = twenty[i] + 0.1*sin(time/158.0) ;
@@ -243,7 +298,7 @@ var PhongFragmentSource = `
             if (poss < min_d) {
                 min_d = poss;
             }
-             
+
         }
         for (int i = 0; i < 14; i++) {
             vec3 other = tweno[i] + 0.1*sin(time/158.0) ;
@@ -251,7 +306,7 @@ var PhongFragmentSource = `
             if (poss < min_d) {
                 min_d = poss;
             }
-             
+
         }
         for (int i = 0; i < 8; i++) {
             vec3 other = twent[i] + 0.1*sin(time/158.0) ;
@@ -259,7 +314,7 @@ var PhongFragmentSource = `
             if (poss < min_d) {
                 min_d = poss;
             }
-             
+
         }
         for (int i = 0; i < 8; i++) {
             vec3 other = twenth[i] + 0.1*sin(time/158.0) ;
@@ -267,7 +322,7 @@ var PhongFragmentSource = `
             if (poss < min_d) {
                 min_d = poss;
             }
-             
+
         }
         for (int i = 0; i < 7; i++) {
             vec3 other = twenf[i] + 0.1*sin(time/158.0) ;
@@ -275,7 +330,7 @@ var PhongFragmentSource = `
             if (poss < min_d) {
                 min_d = poss;
             }
-             
+
         }
         for (int i = 0; i < 9; i++) {
             vec3 other = twenfi[i] + 0.1*sin(time/158.0) ;
@@ -283,7 +338,7 @@ var PhongFragmentSource = `
             if (poss < min_d) {
                 min_d = poss;
             }
-             
+
         }
         kd = vec3(0.9*(1.0 - min_d), min_d/0.2, 0.0);
 
@@ -435,7 +490,7 @@ var ValueFragmentSource = `
         //get the normal vector
         vec3 n2 = vec3(ModelInverse * vec4(vNormal, 1.0));
 
-        // calculate the dot product 
+        // calculate the dot product
         float n_dot_h = dot(normalize(n2), normalize(h));
 
         //get the amount of incident light falling on the point
@@ -462,7 +517,7 @@ var ValueFragmentSource = `
         else if(value < 0.2){
            color = vec4(0.0, 0.0, 0.1, 1.0);
            ks = vec3(0.07);
-           
+
        }
        else if(value < 0.3){
            color = vec4(0.0, 0.0, 0.2, 1.0);
@@ -474,27 +529,27 @@ var ValueFragmentSource = `
        else if(value < 0.35){
            color = vec4(0.0, 0.0, 0.25, 1.0);
            ks = vec3(0.15);
-        
+
        }
         else if(value < 0.5){
            color = vec4(0.0, 0.0, 0.3, 1.0);
            ks = vec3(0.17);
-        
+
        }
        else if(value < 0.6){
         color = vec4(0.0, 0.4, 0.0, 1.0);
         //at the poles
         if(vTextureCoord[1] < 0.15 || vTextureCoord[1] > 0.85){
             color = vec4(1.0, 1.0, 1.0, 0.0);
-        }     
+        }
        }
        else if(value < 0.7){
            color = vec4(0.3, 0.4, 0.0, 1.0);;
-           
+
        }
        else if(value < 0.75){
            color = vec4(0.2, 0.3, 0.0, 1.0);;
-           
+
        }
        else{
            color = vec4(1.0, 1.0, 1.0, 1.0);;
@@ -533,7 +588,7 @@ var ShadedTriangleMesh = function(gl, vertexPositions, vertexNormals, indices, v
 var dist_arr = function() {
     // var lamb = 2.0;
     // this.one = [, 0.5, 0.5, 1.0, 1.0, 1.0];
-    // this.two = 
+    // this.two =
     // this.one =[-0.5745871565615002, -0.4084689615220358, -0.7217118296666857, -0.42447192862999805, -0.27490409049330056, -0.6988167529011846];
     // this.two = [-0.7914265242752359, -0.24846262520148943, 0.035948819198421855, -0.22618968316667298, -0.8132941094654598, 0.7295233995020323];
     // this.one =[-0.9640896522719298, -0.9097148438368039, -0.8032141812621195, -0.9705694242833813, -0.9888746718850396, -0.9073597176823565];
@@ -918,7 +973,7 @@ var Task2 = function(gl) {
 
     //this.moonMesh = new MoonTriangleMesh(gl, moonTexture, TextureCoordinateData, TSpherePositions, TSphereNormals, TSphereIndices, MoonVertexSource, MoonFragmentSource);
 
-    this.cubeMesh = new ShadedTriangleMesh(gl, CubePositions, CubeNormals, CubeIndices, PhongVertexSource, PhongFragmentSource);
+    this.cubeMesh = new ShadedTriangleMesh(gl, CubePositions, CubeNormals, CubeIndices, SunVertexSource, SunFragmentSource);
 
     this.earthMesh = new MoonTriangleMesh(gl, earthTexture, TextureCoordinateData, TSpherePositions, TSphereNormals, TSphereIndices, MoonVertexSource, MoonFragmentSource);
 

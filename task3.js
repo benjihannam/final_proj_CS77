@@ -13,7 +13,7 @@ function rotateAroundAxisAtPoint(axis, angle, point) {
 
 var Task3 = function(gl) {
     this.cameraAngle = 0;
-    this.sphereMesh = new ShadedTriangleMesh(gl, SpherePositions, SphereNormals, SphereIndices, PhongVertexSource, PhongFragmentSource);
+    this.sphereMesh = new ShadedTriangleMesh(gl, SpherePositions, SphereNormals, SphereIndices, SunVertexSource, SunFragmentSource);
     this.cubeMesh = new ShadedTriangleMesh(gl, CubePositions, CubeNormals, CubeIndices, PhongVertexSource, PhongFragmentSource);
 
     gl.enable(gl.DEPTH_TEST);
