@@ -145,7 +145,7 @@ Task1.prototype.render = function(gl, w, h) {
     //this.mesh.render(gl, model, view, projection);
     var rotation = Matrix.rotate(Date.now()/100, 0.4327, 1, 0);
 
-    var sphereModel = Matrix.translate(-1.8, 0, 0).multiply(rotation).multiply(Matrix.scale(1.2, 1.2, 1.2));
+    var sphereModel = Matrix.translate(-1.8, 0, 0).multiply(Matrix.scale(1.2, 1.2, 1.2));
 
     this.sphereMesh.render(gl, sphereModel, view, projection);
 
