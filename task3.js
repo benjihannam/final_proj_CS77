@@ -51,19 +51,17 @@ Task3.prototype.render = function(gl, w, h) {
 
     var rotation = Matrix.rotate(Date.now()/25, 0.4327, 1, 0);
 
-    var cubeModel = Matrix.translate(-4, 0, 0).multiply(rotation).multiply(
-        rotateAroundAxisAtPoint([1, 1, 0], angle, [0, 0, 0])).multiply(
+    var cubeModel = Matrix.translate(-4, 0, 0).multiply(
         Matrix.scale(0.2, 0.2, 0.2));
 
     var earthModel = Matrix.translate(-0, 0, 0).multiply(
-        rotateAroundAxisAtPoint([1, 1, 0], angle, [0, 0, 0])).multiply(rotation).multiply(
         Matrix.scale(0.9, 0.9, 0.9));
 
     var moonModel = Matrix.translate(-2.5, 0, 0).multiply(
         rotateAroundAxisAtPoint([0, 0, 1], angle, [3, 0, 0])).multiply(rotation).multiply( // point controls radius of rotation
         Matrix.scale(0.3, 0.3, 0.3));
 
-    var sunModel = Matrix.translate(-0, 0, 0).multiply(rotation).multiply(
+    var sunModel = Matrix.translate(-0, 0, 0).multiply(
         Matrix.scale(0.9, 0.9, 0.9));
 
     this.moonMesh.render(gl, moonModel, view, projection, this.moonTexture);
