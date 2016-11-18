@@ -1,6 +1,7 @@
 var SpherePositions = [];
 var SphereNormals = [];
 var SphereIndices = [];
+// var worley = [2.0, 3.0];
 
 (function() {
     var NumPhiBands = 30;
