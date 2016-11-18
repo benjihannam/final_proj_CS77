@@ -68,12 +68,12 @@ var PhongFragmentSource = `
 
     void main() {
 
-        vec3 minimum = one[0]+ abs(0.1*sin(0.001*time));
+        vec3 minimum = one[0] + 0.1*sin(time/158.0);
         float min_d = (minimum[0] - vNormal[0])*(minimum[0] - vNormal[0]) + (minimum[1] - vNormal[1])*(minimum[1] - vNormal[1]) + (minimum[2] - vNormal[2])*(minimum[2] - vNormal[2]);
         float max_d = (minimum[0] - vNormal[0])*(minimum[0] - vNormal[0]) + (minimum[1] - vNormal[1])*(minimum[1] - vNormal[1]) + (minimum[2] - vNormal[2])*(minimum[2] - vNormal[2]);
         float poss = 0.0;
         for (int i = 0; i < 8; i++) {
-            vec3 other = one[i+1] + 0.1*sin(0.01*time);
+            vec3 other = one[i+1] + 0.1*sin(time/158.0);
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -85,43 +85,36 @@ var PhongFragmentSource = `
         // float abc = oh[0];
         // if (abc > -.22){
             for (int i = 0; i < 10; i++) {
-                vec3 other = two[i]+ abs(0.1*sin(0.001*time));
+                vec3 other = two[i] + 0.1*sin(time/158.0) ;
                 poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
                 if (poss < min_d) {
                     min_d = poss;
                 }
-                if (poss > max_d) {
-                    max_d = poss;
-                }
+
             }
         // }
         // vec3 oh2 = three[0];
         // float cbd = oh2[0];
         // if (cbd > 0.0) {
             for (int i = 0; i < 12; i++) {
-                vec3 other = three[i]+ abs(0.1*sin(0.001*time));
+                vec3 other = three[i] + 0.1*sin(time/158.0) ;
                 poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
                 if (poss < min_d) {
                     min_d = poss;
                 }
-                if (poss > max_d) {
-                    max_d = poss;
-                }
+                
             }
 
             for (int i = 0; i < 10; i++) {
-                vec3 other = four[i]+ abs(0.1*sin(0.001*time));
+                vec3 other = four[i] + 0.1*sin(time/158.0) ;
                 poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
                 if (poss < min_d) {
                     min_d = poss;
-                }
-                if (poss > max_d) {
-                    max_d = poss;
                 }
             }
 
         for (int i = 0; i < 8; i++) {
-            vec3 other = five[i]+ abs(0.1*sin(0.001*time));
+            vec3 other = five[i] + 0.1*sin(time/158.0) ;
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -129,7 +122,7 @@ var PhongFragmentSource = `
              
         }
         for (int i = 0; i < 10; i++) {
-            vec3 other = six[i]+ abs(0.1*sin(0.001*time));
+            vec3 other = six[i] + 0.1*sin(time/158.0) ;
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -138,7 +131,7 @@ var PhongFragmentSource = `
         }
         // if (cbd > 0.0) {
             for (int i = 0; i < 12; i++) {
-                vec3 other = seven[i]+ abs(0.1*sin(0.001*time));
+                vec3 other = seven[i] + 0.1*sin(time/158.0) ;
                 poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
                 if (poss < min_d) {
                     min_d = poss;
@@ -149,7 +142,7 @@ var PhongFragmentSource = `
             }
         // }
         for (int i = 0; i < 8; i++) {
-            vec3 other = eight[i] + abs(0.1*sin(0.001*time));
+            vec3 other = eight[i] + 0.1*sin(time/158.0)  ;
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -157,7 +150,7 @@ var PhongFragmentSource = `
              
         }
         for (int i = 0; i <11; i++) {
-            vec3 other = nine[i] + abs(0.1*sin(0.001*time));
+            vec3 other = nine[i] + 0.1*sin(time/158.0)  ;
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -165,7 +158,7 @@ var PhongFragmentSource = `
              
         }
         for (int i = 0; i < 7; i++) {
-            vec3 other = ten[i] + abs(0.1*sin(0.001*time));
+            vec3 other = ten[i]  + 0.1*sin(time/158.0) ;
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -173,7 +166,7 @@ var PhongFragmentSource = `
              
         }
         for (int i = 0; i < 9; i++) {
-            vec3 other = elev[i]+ abs(0.1*sin(0.001*time));
+            vec3 other = elev[i] + 0.1*sin(time/158.0) ;
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -181,7 +174,7 @@ var PhongFragmentSource = `
              
         }
         for (int i = 0; i < 10; i++) {
-            vec3 other = twel[i]+ abs(0.1*sin(0.001*time));
+            vec3 other = twel[i] + 0.1*sin(time/158.0) ;
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -189,7 +182,7 @@ var PhongFragmentSource = `
              
         }
         for (int i = 0; i < 7; i++) {
-            vec3 other = thirt[i]+ abs(0.1*sin(0.001*time));
+            vec3 other = thirt[i] + 0.1*sin(time/158.0) ;
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -197,7 +190,7 @@ var PhongFragmentSource = `
              
         }
         for (int i = 0; i < 8; i++) {
-            vec3 other = fourt[i]+ abs(0.1*sin(0.001*time));
+            vec3 other = fourt[i] + 0.1*sin(time/158.0) ;
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -205,7 +198,7 @@ var PhongFragmentSource = `
              
         }
         for (int i = 0; i < 8; i++) {
-            vec3 other = fift[i]+ abs(0.1*sin(0.001*time));
+            vec3 other = fift[i] + 0.1*sin(time/158.0) ;
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -213,7 +206,7 @@ var PhongFragmentSource = `
              
         }
         for (int i = 0; i < 7; i++) {
-            vec3 other = sixt[i]+ abs(0.1*sin(0.001*time));
+            vec3 other = sixt[i] + 0.1*sin(time/158.0) ;
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -221,7 +214,7 @@ var PhongFragmentSource = `
              
         }
         for (int i = 0; i < 9; i++) {
-            vec3 other = sevent[i]+ abs(0.1*sin(0.001*time));
+            vec3 other = sevent[i] + 0.1*sin(time/158.0) ;
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -229,7 +222,7 @@ var PhongFragmentSource = `
              
         }
         for (int i = 0; i < 8; i++) {
-            vec3 other = eighte[i]+ abs(0.1*sin(0.001*time));
+            vec3 other = eighte[i] + 0.1*sin(time/158.0) ;
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -237,7 +230,7 @@ var PhongFragmentSource = `
              
         }
         for (int i = 0; i < 7; i++) {
-            vec3 other = ninet[i]+ abs(0.1*sin(0.001*time));
+            vec3 other = ninet[i] + 0.1*sin(time/158.0) ;
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -245,7 +238,7 @@ var PhongFragmentSource = `
              
         }
         for (int i = 0; i < 9; i++) {
-            vec3 other = twenty[i]+ abs(0.1*sin(0.001*time));
+            vec3 other = twenty[i] + 0.1*sin(time/158.0) ;
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -253,7 +246,7 @@ var PhongFragmentSource = `
              
         }
         for (int i = 0; i < 14; i++) {
-            vec3 other = tweno[i]+ abs(0.1*sin(0.001*time));
+            vec3 other = tweno[i] + 0.1*sin(time/158.0) ;
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -261,7 +254,7 @@ var PhongFragmentSource = `
              
         }
         for (int i = 0; i < 8; i++) {
-            vec3 other = twent[i]+ abs(0.1*sin(0.001*time));
+            vec3 other = twent[i] + 0.1*sin(time/158.0) ;
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -269,7 +262,7 @@ var PhongFragmentSource = `
              
         }
         for (int i = 0; i < 8; i++) {
-            vec3 other = twenth[i]+ abs(0.1*sin(0.001*time));
+            vec3 other = twenth[i] + 0.1*sin(time/158.0) ;
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -277,7 +270,7 @@ var PhongFragmentSource = `
              
         }
         for (int i = 0; i < 7; i++) {
-            vec3 other = twenf[i]+ abs(0.1*sin(0.001*time));
+            vec3 other = twenf[i] + 0.1*sin(time/158.0) ;
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
@@ -285,14 +278,13 @@ var PhongFragmentSource = `
              
         }
         for (int i = 0; i < 9; i++) {
-            vec3 other = twenfi[i]+ abs(0.1*sin(0.001*time));
+            vec3 other = twenfi[i] + 0.1*sin(time/158.0) ;
             poss = (other[0] - vNormal[0])*(other[0] - vNormal[0]) + (other[1] - vNormal[1])*(other[1] - vNormal[1]) + (other[2] - vNormal[2])*(other[2] - vNormal[2]);
             if (poss < min_d) {
                 min_d = poss;
             }
              
         }
-        // min_d = min_d + 0.1*sin(0.2*time);
         kd = vec3(0.9*(1.0 - min_d), min_d/0.2, 0.0);
 
         float roughness = 0.5;
@@ -322,11 +314,6 @@ var PhongFragmentSource = `
         float dotted = (1.0/PI) * cos(ang_ln) * (A + (B * sin(alpha) * sin(beta) * 0.5));
         vec3 L_r = kd * dotted * incident_light;
 
-        // gl_FragColor = vec4(kd, 1.0);//vec4(L_r, 1.0);
-        // if (sin(0.01*time) > 0.0) {
-        //     kd = vec3(0.0, 0.5, 0.2);
-        // }
-        // kd = vec3(0.9*(1.0 - min_d), min_d/0.2, sin(0.5*time));
         gl_FragColor = vec4(mix(kd, vec3(1.0, 1.0, 1.0), 0.3), 1.0);//vec4(L_r, 1.0);
     }
 `;
@@ -753,7 +740,8 @@ ShadedTriangleMesh.prototype.render = function(gl, model, view, projection) {
     // console.log(t);
     var d = new Date();
     var t = d.getMilliseconds();
-    // console.log(t);
+    //console.log()
+    // console.log(Math.sin(t /158.0));
     gl.uniform1f(time, t);
 
     // var time = gl.getUniformLocation(this.shaderProgram, "time");
