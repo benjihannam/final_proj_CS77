@@ -55,6 +55,10 @@ var ValueInitColorsFragmentSource = `
         color = vec4(light_blue, 1.0);
 
        }
+       else if (value < 0.52){
+           vec3 lightest_blue = vec3(0.0, 0.0, 0.7);
+           color = vec4(lightest_blue, 1.0);
+       }
        else if (value < 0.6){
            vec3 green = vec3(0.223, 0.462, 0.156);
            color = vec4(green, 1.0);
