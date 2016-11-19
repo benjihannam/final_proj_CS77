@@ -131,7 +131,7 @@ Task7.prototype.render = function(gl, w, h) {
     var r = 4.0;
     var pi = 3.141;
 
-    var earth_angle = Date.now() / 100;
+    var earth_angle = Date.now() / 400;
     var mercury_angle = earth_angle * 4;
     var venus_angle = earth_angle * (3/2) ;
     var mars_angle = earth_angle / 1.88;

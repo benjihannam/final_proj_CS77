@@ -543,7 +543,8 @@ var ValueFragmentSource = `
 
         vec4 color = vec4(value, value, value, 1.0);
         if(value < 0.5){
-            vec3 dark_blue = vec3(0.0, 0.0, 0.05);
+            value = value + 0.7*value*sin(time);
+            vec3 dark_blue = vec3(0.0, 0.0, 0.1);
            vec3 light_blue = vec3(0.0, 0.0, 0.2);
            color = vec4(mix(dark_blue, light_blue, value * 2.0), 1.0);
            ks = vec3(0.17);
@@ -916,9 +917,8 @@ MoonTriangleMesh.prototype.render = function(gl, model, view, projection, tex) {
     // console.log(t);
     var d = new Date();
     var t = d.getMilliseconds();
-    //console.log()
-    // console.log(Math.sin(t /158.0));
-    gl.uniform1f(time, t);
+    var t1 = d.getSeconds();
+    gl.uniform1f(time, t/1000.0 + t1);
 
     // can pass time directly to fragment shader to move texture around (sin + position or something)
 
