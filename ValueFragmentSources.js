@@ -85,8 +85,8 @@ var ValueSpecularFragmentSource = `
     uniform sampler2D uSampler;
     uniform float time;
 
-    const vec3 LightPosition = vec3(5.0, 0.0, 100.0);
-    const vec3 LightIntensity = vec3(5000.0);
+    const vec3 LightPosition = vec3(0.0, 0.0, 0.0);
+    const vec3 LightIntensity = vec3(6.0);
     uniform mat4 ViewInverse;
     uniform mat4 ModelInverse;
     const float n = 1.0;
