@@ -1,3 +1,5 @@
+// Adapted from https://threejs.org/examples/#webgl_shader_lava
+
 var DoubleVertexSource = `
 
     uniform mat4 ModelViewProjection;
@@ -39,13 +41,54 @@ var DoubleFragmentSource = `
     uniform sampler2D uSampler;
     uniform sampler2D uSampler2;
     uniform float time;
+    uniform float random;
 
 
     void main() {
+
+      // vec4 color0 = texture2D(uSampler, vTextureCoord);
+      // vec4 color1 = texture2D(uSampler2, vTextureCoord);
+      // if (random < 0.2) {
+      //   gl_FragColor = color0 * color1 - 0.1*sin(time/158.0);
+      //
+      // } else if (random < 0.4) {
+      //   gl_FragColor = color0 * color1 + 0.1*sin(time/158.0);
+      // } else if (random < 0.6) {
+      //   gl_FragColor = color0 * color1 + 0.2*sin(time/158.0);
+      //
+      // } else if (random < 0.8) {
+      //   gl_FragColor = color0 * color1 - 0.2*sin(time/158.0);
+      //
+      // } else {
+      //   gl_FragColor = color0 * color1 + 0.3*sin(time/158.0);
+      //
+      // }
+      // //gl_FragColor = color0 * color1 + 0.1*sin(time/158.0);
+
+
       vec4 color0 = texture2D(uSampler, vTextureCoord);
-      vec4 color1 = texture2D(uSampler2, vTextureCoord);
-      gl_FragColor = color0 * color1;
+
+      vec2 T1 = vTextureCoord + vec2( 1.5, -1.5 ) * time * 0.02;
+      vec2 T2 = vTextureCoord + vec2( -0.5, 2.0 ) * time * 0.01;
+      T1.x += color0.x * 2.0;
+      T1.y += color0.y * 2.0;
+      T2.x -= color0.y * 0.2;
+      T2.y += color0.z * 0.2;
+
+      float p = texture2D( uSampler, T1 * 2.0 ).a;
+
+      vec4 color1 = texture2D( uSampler2, T2 * 2.0 );
+
+      vec4 temp = color1 * ( vec4( p, p, p, p ) * 2.0 ) + ( color1 * color1 - 0.1 );
+
+      // if( temp.r > 1.0 ){ temp.bg += clamp( temp.r - 2.0, 0.0, 100.0 ); }
+      // if( temp.g > 1.0 ){ temp.rb += temp.g - 1.0; }
+      // if( temp.b > 1.0 ){ temp.rg += temp.b - 1.0; }
+      gl_FragColor = temp;
+
+
     }
+
 `;
 
 
@@ -133,8 +176,14 @@ DoubleTriangleMesh.prototype.render = function(gl, model, view, projection, tex1
 
     var time = gl.getUniformLocation(this.shaderProgram, "time");
     var d = new Date();
-    var t = d.getMilliseconds();
-    gl.uniform1f(time, t);
+    var t = d.getSeconds();
+    var t1 = d.getMilliseconds();
+
+    gl.uniform1f(time, t+t1/1000.0);
+
+    var random = gl.getUniformLocation(this.shaderProgram, "random");
+    gl.uniform1f(random, Math.random());
+
 
 
     gl.drawElements(gl.TRIANGLES, this.indexCount, gl.UNSIGNED_SHORT, 0);
@@ -152,7 +201,7 @@ var Task3 = function(gl) {
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
               new Uint8Array([0, 0, 255, 255]));
     var image1 = new Image();
-    image1.src = "earth.png";
+    image1.src = "sun2.png";
     image1.addEventListener('load', function() {
         // Now that the image has loaded make copy it to the texture.
         gl.bindTexture(gl.TEXTURE_2D, firstTexture);
@@ -165,7 +214,7 @@ var Task3 = function(gl) {
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
               new Uint8Array([0, 0, 255, 255]));
     var image2 = new Image();
-    image2.src = "funky.png";
+    image2.src = "sun3.png";
     image2.addEventListener('load', function() {
         // Now that the image has loaded make copy it to the texture.
         gl.bindTexture(gl.TEXTURE_2D, secondTexture);
