@@ -805,7 +805,6 @@ ShadedTriangleMesh.prototype.render = function(gl, model, view, projection) {
     gl.uniform3fv(ttf, f.twenf);
     var ttfi = gl.getUniformLocation(this.shaderProgram, "twenfi");
     gl.uniform3fv(ttfi, f.twenfi);
-    // var t = gl.Un
 
     var mvp = gl.getUniformLocation(this.shaderProgram, "ModelViewProjection");
     gl.uniformMatrix4fv(mvp, false, ModelViewProjection.transpose().m);
@@ -819,33 +818,12 @@ ShadedTriangleMesh.prototype.render = function(gl, model, view, projection) {
     var modelInverseMatrix = gl.getUniformLocation(this.shaderProgram, "ModelInverse");
     gl.uniformMatrix4fv(modelInverseMatrix, false, model.inverse().m);
 
-    // if (Date.now() % 2 == 0) {
-    //     var time = gl.getUniformLocation(this.shaderProgram, "time");
-    //     var t = Date.getSeconds();
-    //     // console.log(t);
-    //     gl.uniform1f(time, t);
-    // }
-
     var time = gl.getUniformLocation(this.shaderProgram, "time");
-    // var t = Date.now()/2.0;
-    // console.log("ther");
-    // console.log(t);
+
     var d = new Date();
     var t = d.getMilliseconds();
     var t1 = d.getSeconds();
     gl.uniform1f(time, t/1000.0 + t1);
-
-    // var time = gl.getUniformLocation(this.shaderProgram, "time");
-    // var t = Date.now()/2.0;
-    // gl.uniform1f(time, t);
-    // console.log(Date.now());
-
-
-    // var texcoordLocation = gl.getAttribLocation(program, "a_texcoords");
-    // gl.enableVertexAttribArray(texcoordLocation);
-    // gl.vertexAttribPointer(texcoordLocation, 2, gl.FLOAT, false, 0, 0);
-    // setTexcoords(gl);
-
 
     gl.drawElements(gl.TRIANGLES, this.indexCount, gl.UNSIGNED_SHORT, 0);
 
@@ -912,55 +890,13 @@ MoonTriangleMesh.prototype.render = function(gl, model, view, projection, tex) {
     var samplerUniform = gl.getUniformLocation(this.shaderProgram, "uSampler");
 
     var time = gl.getUniformLocation(this.shaderProgram, "time");
-    // var t = Date.now()/2.0;
-    // console.log("ther");
-    // console.log(t);
     var d = new Date();
     var t = d.getMilliseconds();
     var t1 = d.getSeconds();
     gl.uniform1f(time, t/1000.0 + t1);
 
-    // can pass time directly to fragment shader to move texture around (sin + position or something)
-
 
     gl.drawElements(gl.TRIANGLES, this.indexCount, gl.UNSIGNED_SHORT, 0);
-
-    // var ambientColorUniform = gl.getUniformLocation(shaderProgram, "uAmbientColor");
-    // var lightingDirectionUniform = gl.getUniformLocation(shaderProgram, "uLightingDirection");
-    // var directionalColorUniform = gl.getUniformLocation(shaderProgram, "uDirectionalColor");
-
-
-
-
-    // moonTexture.image = new Image();
-    // moonTexture.image.crossOrigin = '';
-    // moonTexture.image.onload = function () {
-    //   gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-    //   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, moonTexture.image);
-    //   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-    //   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-    //   gl.bindTexture(gl.TEXTURE_2D, null);
-    // }
-    // moonTexture.image.src = "moon.gif";
-
-    // gl.activeTexture(gl.TEXTURE0);
-    // gl.bindTexture(gl.TEXTURE_2D, moonTexture);
-    // gl.uniform1i(shaderProgram.samplerUniform, 0);
-
-
-    // var texcoordLocation = gl.getAttribLocation(program, "a_texcoords");
-    // gl.enableVertexAttribArray(texcoordLocation);
-    // gl.vertexAttribPointer(texcoordLocation, 2, gl.FLOAT, false, 0, 0);
-    // setTexcoords(gl);
-    // shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "uSampler");
-    //
-    // shaderProgram.TextureCoordinateAttribute = gl.getAttribLocation(shaderProgram, "aTextureCoord");
-    // gl.enableVertexAttribArray(shaderProgram.TextureCoordinateAttribute);
-    //
-    //
-    //
-    // gl.bindBuffer(gl.ARRAY_BUFFER, moonVertexTextureCoordBuffer);
-    // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordData), gl.STATIC_DRAW);
 
 
 }
@@ -1013,10 +949,8 @@ var Task2 = function(gl) {
     this.earthTexture = earthTexture;
     this.valueTexture = valueTexture;
 
-
-    //this.moonMesh = new MoonTriangleMesh(gl, moonTexture, TextureCoordinateData, TSpherePositions, TSphereNormals, TSphereIndices, MoonVertexSource, MoonFragmentSource);
-
-    this.cubeMesh = new ShadedTriangleMesh(gl, CubePositions, CubeNormals, CubeIndices, SunVertexSource, SunFragmentSource);
+    // this cube is our friend
+    //this.cubeMesh = new ShadedTriangleMesh(gl, CubePositions, CubeNormals, CubeIndices, SunVertexSource, SunFragmentSource);
 
     this.earthMesh = new MoonTriangleMesh(gl, earthTexture, TextureCoordinateData, TSpherePositions, TSphereNormals, TSphereIndices, MoonVertexSource, MoonFragmentSource);
 
@@ -1039,12 +973,9 @@ Task2.prototype.render = function(gl, w, h) {
     var sphereModel = Matrix.translate(-2.0, 0, 0).multiply(rotation).multiply(Matrix.scale(1.5, 1.5, 1.5));
     var sphereModel2 = Matrix.translate(2.0, 0, 0).multiply(rotation).multiply(Matrix.scale(1.5, 1.5, 1.5));
 
-    //this.sphereMesh.render(gl, sphereModel2, view, projection);
+
     this.earthMesh.render(gl, sphereModel, view, projection, this.earthTexture);
-    //this.moonMesh.render(gl, sphereModel2, view, projection, this.moonTexture);
-    this.cubeMesh.render(gl, cubeModel, view, projection);
-
-
+    //this.cubeMesh.render(gl, cubeModel, view, projection);
     this.valueMesh.render(gl, sphereModel2, view, projection, this.valueTexture);
 
 }

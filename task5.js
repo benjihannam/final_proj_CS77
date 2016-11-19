@@ -41,15 +41,30 @@ var Task5 = function(gl) {
         gl.generateMipmap(gl.TEXTURE_2D);
       });
 
+    var sunTexture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, sunTexture);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+              new Uint8Array([0, 0, 255, 255]));
+    var image5 = new Image();
+    image5.src = "sunsmile.png";
+    image5.addEventListener('load', function() {
+        // Now that the image has loaded make copy it to the texture.
+        gl.bindTexture(gl.TEXTURE_2D, sunTexture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image5);
+        gl.generateMipmap(gl.TEXTURE_2D);
+      });
+
 
     this.laurenTexture = laurenTexture;
     this.benjiTexture = benjiTexture;
     this.sydniTexture = sydniTexture;
+    this.sunTexture = sunTexture;
 
     this.laurenMesh = new MoonTriangleMesh(gl, laurenTexture, TextureCoordinateData, TSpherePositions, TSphereNormals, TSphereIndices, MoonVertexSource, MoonFragmentSource);
     this.sydniMesh = new MoonTriangleMesh(gl, sydniTexture, TextureCoordinateData, TSpherePositions, TSphereNormals, TSphereIndices, MoonVertexSource, MoonFragmentSource);
+    this.sunMesh = new MoonTriangleMesh(gl, sunTexture, TextureCoordinateData, TSpherePositions, TSphereNormals, TSphereIndices, MoonVertexSource, MoonFragmentSource);
 
-    this.sphereMesh = new ShadedTriangleMesh(gl, SpherePositions, SphereNormals, SphereIndices, SunVertexSource, SunFragmentSource);
+    //this.sphereMesh = new ShadedTriangleMesh(gl, SpherePositions, SphereNormals, SphereIndices, SunVertexSource, SunFragmentSource);
     this.cubeMesh = new ShadedTriangleMesh(gl, CubePositions, CubeNormals, CubeIndices, PhongVertexSource, PhongFragmentSource);
 
 
@@ -88,7 +103,7 @@ Task5.prototype.render = function(gl, w, h) {
 
     this.laurenMesh.render(gl, moonModel, view, projection, this.laurenTexture);
     this.sydniMesh.render(gl, earthModel, view, projection, this.sydniTexture);
-    this.sphereMesh.render(gl, sunModel, view, projection);
+    this.sunMesh.render(gl, sunModel, view, projection, this.sunTexture);
 
     this.benjiMesh.render(gl, cubeModel, view, projection, this.benjiTexture);
 
