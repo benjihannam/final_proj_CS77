@@ -549,7 +549,7 @@ var ValueFragmentSource = `
            color = vec4(mix(dark_blue, light_blue, value * 2.0), 1.0);
            ks = vec3(0.17);
 
-           
+
 
        }
        else if (value < 0.51){
@@ -1009,7 +1009,23 @@ var Task2 = function(gl) {
         gl.generateMipmap(gl.TEXTURE_2D);
       });
 
+    var starTexture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, starTexture);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+              new Uint8Array([0, 0, 255, 255]));
+    var image = new Image();
+    image.src = "space2.png";
+    image.addEventListener('load', function() {
+        // Now that the image has loaded make copy it to the texture.
+        gl.bindTexture(gl.TEXTURE_2D, starTexture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image);
+        gl.generateMipmap(gl.TEXTURE_2D);
+      });
 
+
+    this.starTexture = starTexture;
+
+    this.starMesh = new MoonTriangleMesh(gl, starTexture, CubeTextureCoordinates, CubePositions, CubeNormals, CubeIndices, MoonVertexSource, MoonFragmentSource);
 
     this.moonTexture = moonTexture;
     this.earthTexture = earthTexture;
@@ -1040,6 +1056,11 @@ Task2.prototype.render = function(gl, w, h) {
     var cubeModel = Matrix.translate(-3.8, 2, 0).multiply(rotation).multiply(Matrix.scale(0.3, 0.3, 0.3));
     var sphereModel = Matrix.translate(-2.0, 0, 0).multiply(rotation).multiply(Matrix.scale(1.5, 1.5, 1.5));
     var sphereModel2 = Matrix.translate(2.0, 0, 0).multiply(rotation).multiply(Matrix.scale(1.5, 1.5, 1.5));
+    var starModel = Matrix.translate(-0, 0, 0).multiply(
+         Matrix.scale(10, 10, 10));
+
+
+    this.starMesh.render(gl, starModel, view, projection, this.starTexture);
 
     //this.sphereMesh.render(gl, sphereModel2, view, projection);
     this.earthMesh.render(gl, sphereModel, view, projection, this.earthTexture);

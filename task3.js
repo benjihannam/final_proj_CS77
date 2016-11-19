@@ -152,9 +152,9 @@ DoubleTriangleMesh.prototype.render = function(gl, model, view, projection, tex1
     gl.vertexAttribPointer(texture, 2, gl.FLOAT, false, 0, 0);
 
 
-    var texture2 = gl.getAttribLocation(this.shaderProgram, "aTextureCoord");
-    gl.enableVertexAttribArray(texture2);
-    gl.vertexAttribPointer(texture2, 2, gl.FLOAT, false, 0, 0);
+    // var texture2 = gl.getAttribLocation(this.shaderProgram, "aTextureCoord");
+    // gl.enableVertexAttribArray(texture2);
+    // gl.vertexAttribPointer(texture2, 2, gl.FLOAT, false, 0, 0);
 
     var samplerUniform = gl.getUniformLocation(this.shaderProgram, "uSampler");
     var samplerUniform2 = gl.getUniformLocation(this.shaderProgram, "uSampler2");
@@ -195,6 +195,26 @@ var textures = [];
 
 var Task3 = function(gl) {
     this.cameraAngle = 0;
+
+    var starTexture = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, starTexture);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+            new Uint8Array([0, 0, 255, 255]));
+  var image = new Image();
+  image.src = "space2.png";
+  image.addEventListener('load', function() {
+      // Now that the image has loaded make copy it to the texture.
+      gl.bindTexture(gl.TEXTURE_2D, starTexture);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image);
+      gl.generateMipmap(gl.TEXTURE_2D);
+    });
+
+
+this.starTexture = starTexture;
+
+
+this.starMesh = new MoonTriangleMesh(gl, starTexture, CubeTextureCoordinates, CubePositions, CubeNormals, CubeIndices, MoonVertexSource, MoonFragmentSource);
+
 
     var firstTexture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, firstTexture);

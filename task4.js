@@ -3,6 +3,27 @@ var Task4 = function(gl) {
     this.sphereMesh = new ShadedTriangleMesh(gl, DTSpherePositions, DTSphereNormals, DTSphereIndices, SunVertexSource, SunFragmentSource);
     this.cubeMesh = new ShadedTriangleMesh(gl, CubePositions, CubeNormals, CubeIndices, PhongVertexSource, PhongFragmentSource);
 
+    var starTexture = gl.createTexture();
+      gl.bindTexture(gl.TEXTURE_2D, starTexture);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+                new Uint8Array([0, 0, 255, 255]));
+      var image = new Image();
+      image.src = "space2.png";
+      image.addEventListener('load', function() {
+          // Now that the image has loaded make copy it to the texture.
+          gl.bindTexture(gl.TEXTURE_2D, starTexture);
+          gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image);
+          gl.generateMipmap(gl.TEXTURE_2D);
+        });
+
+
+    this.starTexture = starTexture;
+
+
+    this.starMesh = new MoonTriangleMesh(gl, starTexture, CubeTextureCoordinates, CubePositions, CubeNormals, CubeIndices, MoonVertexSource, MoonFragmentSource);
+
+
+
     gl.enable(gl.DEPTH_TEST);
 }
 
@@ -33,6 +54,12 @@ Task4.prototype.render = function(gl, w, h) {
     var moonModel = Matrix.translate(-2.5, 0, 0).multiply(
         rotateAroundAxisAtPoint([0, 0, 1], angle, [3, 0, 0])).multiply(rotation).multiply( // point controls radius of rotation
         Matrix.scale(0.3, 0.3, 0.3));
+
+    var starModel = Matrix.translate(-0, 0, 0).multiply(
+         Matrix.scale(10, 10, 10));
+
+
+     this.starMesh.render(gl, starModel, view, projection, this.starTexture);
 
     //this.sphereMesh.render(gl, moonModel, view, projection);
     this.sphereMesh.render(gl, sunModel, view, projection);

@@ -40,6 +40,25 @@ var Task6 = function(gl) {
         gl.generateMipmap(gl.TEXTURE_2D);
       });
 
+      var starTexture = gl.createTexture();
+      gl.bindTexture(gl.TEXTURE_2D, starTexture);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+                new Uint8Array([0, 0, 255, 255]));
+      var image4 = new Image();
+      image4.src = "space2.png";
+      image4.addEventListener('load', function() {
+          // Now that the image has loaded make copy it to the texture.
+          gl.bindTexture(gl.TEXTURE_2D, starTexture);
+          gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image4);
+          gl.generateMipmap(gl.TEXTURE_2D);
+        });
+
+
+    this.starTexture = starTexture;
+
+
+    this.starMesh = new MoonTriangleMesh(gl, starTexture, CubeTextureCoordinates, CubePositions, CubeNormals, CubeIndices, MoonVertexSource, MoonFragmentSource);
+
 
     this.moonTexture = moonTexture;
     this.earthTexture = earthTexture;
@@ -88,6 +107,11 @@ Task6.prototype.render = function(gl, w, h) {
     var sphere2 = Matrix.scale(0.9, 0.9, 0.9).multiply(Matrix.translate(r * Math.cos(5.0*pi/3.0), 0, r* Math.sin(5.0*pi/3.0)).multiply(rotation));
     // var sphere2 = Matrix.translate(2.0, 0, 0).multiply(rotation).multiply(Matrix.scale(1.0, 1.0, 1.0));
 
+    var starModel = Matrix.translate(-0, 0, 0).multiply(
+           Matrix.scale(10, 10, 10));
+
+
+    this.starMesh.render(gl, starModel, view, projection, this.starTexture);
 
     //this.sphereMesh.render(gl, sphereModel2, view, projection);
     //this.earthMesh.render(gl, sphereModel, view, projection, this.earthTexture);

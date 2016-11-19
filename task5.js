@@ -66,7 +66,7 @@ var Task5 = function(gl) {
     this.sphereMesh = new ShadedTriangleMesh(gl, SpherePositions, SphereNormals, SphereIndices, SunVertexSource, SunFragmentSource);
     this.cubeMesh = new ShadedTriangleMesh(gl, CubePositions, CubeNormals, CubeIndices, PhongVertexSource, PhongFragmentSource);
 
-    this.starMesh = new MoonTriangleMesh(gl, starTexture, TextureCoordinateData, TSpherePositions, TSphereNormals, TSphereIndices, MoonVertexSource, MoonFragmentSource);
+    this.starMesh = new MoonTriangleMesh(gl, starTexture, CubeTextureCoordinates, CubePositions, CubeNormals, CubeIndices, MoonVertexSource, MoonFragmentSource);
 
     this.benjiMesh = new MoonTriangleMesh(gl, benjiTexture, CubeTextureCoordinates, CubePositions, CubeNormals, CubeIndices, MoonVertexSource, MoonFragmentSource);
 
@@ -106,7 +106,7 @@ Task5.prototype.render = function(gl, w, h) {
 
     this.laurenMesh.render(gl, moonModel, view, projection, this.laurenTexture);
     this.sydniMesh.render(gl, earthModel, view, projection, this.sydniTexture);
-    //this.starMesh.render(gl, starModel, view, projection, this.starTexture);
+    this.starMesh.render(gl, starModel, view, projection, this.starTexture);
     this.sphereMesh.render(gl, sunModel, view, projection);
 
     this.benjiMesh.render(gl, cubeModel, view, projection, this.benjiTexture);
