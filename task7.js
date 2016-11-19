@@ -1,4 +1,5 @@
 var Task7 = function(gl) {
+    console.log("Here");
     this.cameraAngle = 0;
 
     var moonTexture = gl.createTexture();
