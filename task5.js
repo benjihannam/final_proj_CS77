@@ -2,19 +2,6 @@ var Task5 = function(gl) {
     this.cameraAngle = 0;
 
 
-    var starTexture = gl.createTexture();
-    gl.bindTexture(gl.TEXTURE_2D, starTexture);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
-              new Uint8Array([0, 0, 255, 255]));
-    var image = new Image();
-    image.src = "space2.png";
-    image.addEventListener('load', function() {
-        // Now that the image has loaded make copy it to the texture.
-        gl.bindTexture(gl.TEXTURE_2D, starTexture);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image);
-        gl.generateMipmap(gl.TEXTURE_2D);
-      });
-
     var laurenTexture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, laurenTexture);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
@@ -55,7 +42,6 @@ var Task5 = function(gl) {
       });
 
 
-    this.starTexture = starTexture;
     this.laurenTexture = laurenTexture;
     this.benjiTexture = benjiTexture;
     this.sydniTexture = sydniTexture;
@@ -66,7 +52,6 @@ var Task5 = function(gl) {
     this.sphereMesh = new ShadedTriangleMesh(gl, SpherePositions, SphereNormals, SphereIndices, SunVertexSource, SunFragmentSource);
     this.cubeMesh = new ShadedTriangleMesh(gl, CubePositions, CubeNormals, CubeIndices, PhongVertexSource, PhongFragmentSource);
 
-    this.starMesh = new MoonTriangleMesh(gl, starTexture, CubeTextureCoordinates, CubePositions, CubeNormals, CubeIndices, MoonVertexSource, MoonFragmentSource);
 
     this.benjiMesh = new MoonTriangleMesh(gl, benjiTexture, CubeTextureCoordinates, CubePositions, CubeNormals, CubeIndices, MoonVertexSource, MoonFragmentSource);
 
@@ -101,12 +86,8 @@ Task5.prototype.render = function(gl, w, h) {
     var sunModel = Matrix.translate(-0, 0, 0).multiply(rotation).multiply(
         Matrix.scale(0.9, 0.9, 0.9));
 
-    var starModel = Matrix.translate(-0, 0, 0).multiply(
-        Matrix.scale(10, 10, 10));
-
     this.laurenMesh.render(gl, moonModel, view, projection, this.laurenTexture);
     this.sydniMesh.render(gl, earthModel, view, projection, this.sydniTexture);
-    this.starMesh.render(gl, starModel, view, projection, this.starTexture);
     this.sphereMesh.render(gl, sunModel, view, projection);
 
     this.benjiMesh.render(gl, cubeModel, view, projection, this.benjiTexture);
