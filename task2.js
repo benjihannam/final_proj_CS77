@@ -547,7 +547,7 @@ var ValueFragmentSource = `
            vec3 light_blue = vec3(0.0, 0.0, 0.2);
            color = vec4(mix(dark_blue, light_blue, value * 2.0), 1.0);
            ks = vec3(0.17);
-           
+
            
 
        }
@@ -560,7 +560,7 @@ var ValueFragmentSource = `
            vec3 brown = vec3(0.392, 0.333, 0.184);
            vec3 green = vec3(0.223, 0.462, 0.156);
            color = vec4(mix(green, brown, (value-0.5)*1.0/0.3), 1.0);
-           if(vTextureCoord[1] < 0.15 || vTextureCoord[1] > 0.85){
+           if(vTextureCoord[1] < 0.2 || vTextureCoord[1] > 0.80){
             if(value  > 0.6){
                 color = vec4(0.86, 0.86, 0.86, 0.0);
             }

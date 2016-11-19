@@ -120,22 +120,18 @@ Task7.prototype.render = function(gl, w, h) {
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    var move_factor = Math.sin(Date.now()/4000);
-    var swing_factor = move_factor;
-    // if(move_factor > 0){
-    //     swing_factor = move_factor;
-    // }
+    var move_factor = Math.sin(Date.now()/10000);
     var projection = Matrix.perspective(60, w/h, 0.1, 100);
     var view =
-        Matrix.translate(-15*swing_factor, 0, -30 + 15*move_factor).multiply(
-        Matrix.rotate(this.cameraAngle-swing_factor*50, 0, 1, 0));
+        Matrix.translate(-5, 0, -20 + 15*move_factor).multiply(
+        Matrix.rotate(this.cameraAngle - move_factor*180, 0, 1, 0));
     var rotation = Matrix.rotate(Date.now()/100, 0.2327, 1, 0);
     var sun_rotation = Matrix.rotate(Date.now()/100, -15, 0, 5);
 
     var r = 4.0;
     var pi = 3.141;
 
-    var earth_angle = Date.now() / 50;
+    var earth_angle = Date.now() / 100;
     var mercury_angle = earth_angle * 4;
     var venus_angle = earth_angle * (3/2) ;
     var mars_angle = earth_angle / 1.88;
