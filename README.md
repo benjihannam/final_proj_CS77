@@ -17,6 +17,8 @@ TODO: Write usage instructions
 
 ### Procedural texturing using value noise, Worley noise, displacement mapping
 
+Value Noise: Generated the java code based off of http://lodev.org/cgtutor/randomnoise.html, which also gave the basic algorithm for the turbulence. This is done by first generating a random value between (0,1) for every pixel point on the texture, to generate a 2D noise map. From there I linearly interpolated at different depths to generate the turbulance and produce a turbulance texture. The next steps involved adding color depending on the value of the texture, where I assumed lower values to be shallower heights on the planet (e.g the sea) whilst higher values were larger heights such as terrain and mountains. 
+
 Worley Noise: used http://graphics.ucsd.edu/courses/cse168_s06/ucsd/cellular_noise.pdf the actualy paper from Worley to implement. Used the python file to generate polar coordinates in a 180x360 2D array. In each array, we can force the number of "feature points" and then we use a Poisson density distribution to calculate how many feature points are in each unit. From this, we take these points and convert them to x,y,z cartesian coordinates on a sphere with origin (0,0,0). Using these arrays of feature points, for each position on the object, the closest feature point is calculated and that distance is used to determine what color will be given, procedurally generated, to that position on the object.
 
 Worley Animation: Pass Date.getSeconds + Date.getMilliseconds/1000.0 as a uniform into the FragShader and influence the feature points by adding / subtracting sines and cosines of the time that has been passed in.
