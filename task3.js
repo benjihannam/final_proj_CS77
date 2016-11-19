@@ -66,7 +66,7 @@ var DoubleFragmentSource = `
       // //gl_FragColor = color0 * color1 + 0.1*sin(time/158.0);
 
 
-      vec4 color0 = texture2D(uSampler, vTextureCoord);
+      vec4 color0 = texture2D(uSampler2, vTextureCoord);
 
       vec2 T1 = vTextureCoord + vec2( 1.5, -1.5 ) * time * 0.02;
       vec2 T2 = vTextureCoord + vec2( -0.5, 2.0 ) * time * 0.01;
@@ -77,7 +77,7 @@ var DoubleFragmentSource = `
 
       float p = texture2D( uSampler, T1 * 2.0 ).a;
 
-      vec4 color1 = texture2D( uSampler2, T2 * 2.0 );
+      vec4 color1 = texture2D( uSampler, T2 * 2.0 );
 
       vec4 temp = color1 * ( vec4( p, p, p, p ) * 2.0 ) + ( color1 * color1 - 0.1 );
 
@@ -201,7 +201,7 @@ var Task3 = function(gl) {
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
               new Uint8Array([0, 0, 255, 255]));
     var image1 = new Image();
-    image1.src = "sun2.png";
+    image1.src = "sun6.png";
     image1.addEventListener('load', function() {
         // Now that the image has loaded make copy it to the texture.
         gl.bindTexture(gl.TEXTURE_2D, firstTexture);
@@ -214,7 +214,7 @@ var Task3 = function(gl) {
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
               new Uint8Array([0, 0, 255, 255]));
     var image2 = new Image();
-    image2.src = "sun3.png";
+    image2.src = "sun5.png";
     image2.addEventListener('load', function() {
         // Now that the image has loaded make copy it to the texture.
         gl.bindTexture(gl.TEXTURE_2D, secondTexture);
@@ -231,7 +231,7 @@ var Task3 = function(gl) {
     this.firstMesh = new MoonTriangleMesh(gl, firstTexture, TextureCoordinateData, TSpherePositions, TSphereNormals, TSphereIndices, MoonVertexSource, MoonFragmentSource);
     this.secondMesh = new MoonTriangleMesh(gl, secondTexture, TextureCoordinateData, TSpherePositions, TSphereNormals, TSphereIndices, MoonVertexSource, MoonFragmentSource);
 
-    this.doubleMesh = new DoubleTriangleMesh(gl, firstTexture, secondTexture, TextureCoordinateData, TSpherePositions, TSphereNormals, TSphereIndices, DoubleVertexSource, DoubleFragmentSource);
+    this.doubleMesh = new DoubleTriangleMesh(gl, firstTexture, secondTexture, TextureCoordinateData, DTSpherePositions, DTSphereNormals, DTSphereIndices, DoubleVertexSource, DoubleFragmentSource);
 
     this.sphereMesh = new ShadedTriangleMesh(gl, SpherePositions, SphereNormals, SphereIndices, SunVertexSource, SunFragmentSource);
     this.cubeMesh = new ShadedTriangleMesh(gl, CubePositions, CubeNormals, CubeIndices, PhongVertexSource, PhongFragmentSource);
