@@ -14,6 +14,19 @@ var Task6 = function(gl) {
         gl.generateMipmap(gl.TEXTURE_2D);
       });
 
+    var earthTexture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, earthTexture);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+              new Uint8Array([0, 0, 255, 255]));
+    var image2 = new Image();
+    image2.src = "earth.png";
+    image2.addEventListener('load', function() {
+        // Now that the image has loaded make copy it to the texture.
+        gl.bindTexture(gl.TEXTURE_2D, earthTexture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image2);
+        gl.generateMipmap(gl.TEXTURE_2D);
+      });
+
     var valueTexture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, valueTexture);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
@@ -29,6 +42,7 @@ var Task6 = function(gl) {
 
 
     this.moonTexture = moonTexture;
+    this.earthTexture = earthTexture;
     this.valueTexture = valueTexture;
 
 
@@ -75,7 +89,7 @@ Task6.prototype.render = function(gl, w, h) {
 
     //this.sphereMesh.render(gl, sphereModel2, view, projection);
     //this.earthMesh.render(gl, sphereModel, view, projection, this.earthTexture);
-    this.mesh1.render(gl, sphere1, view, projection, this.moonTexture);
+    this.mesh1.render(gl, sphere1, view, projection, this.earthTexture);
     this.mesh2.render(gl, sphere2, view, projection, this.moonTexture);
     this.mesh3.render(gl, sphere3, view, projection, this.valueTexture);
     this.mesh4.render(gl, sphere4, view, projection, this.valueTexture);
