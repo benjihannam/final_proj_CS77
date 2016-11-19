@@ -47,7 +47,7 @@ var ValueInitColorsFragmentSource = `
 
         //sea
         if(value < 0.4){
-           vec3 dark_blue = vec3(0.0, 0.0, 0.05);
+           vec3 dark_blue = vec3(0.0, 0.0, 0.1);
            color = vec4(dark_blue, 1.0);
        }
        else if (value < 0.5){
@@ -108,26 +108,29 @@ var ValueSpecularFragmentSource = `
         if(value < 0.4){
            vec3 dark_blue = vec3(0.0, 0.0, 0.05);
            color = vec4(dark_blue, 1.0);
-           ks = vec3(0.17);
+           ks = vec3(0.3);
        }
        else if (value < 0.5){
         vec3 light_blue = vec3(0.0, 0.0, 0.2);
         color = vec4(light_blue, 1.0);
-        ks = vec3(0.17);
+        ks = vec3(0.3);
        }
        //land
        else if (value < 0.6){
            vec3 green = vec3(0.223, 0.462, 0.156);
            color = vec4(green, 1.0);
+           vec3 ks = vec3(0.0);
        }
        else if(value < 0.80){
            vec3 brown = vec3(0.392, 0.333, 0.184);
            color = vec4(brown, 1.0);
+           vec3 ks = vec3(0.0);
 
 
        }
        else{
            color = vec4(0.86, 0.86, 0.86, 0.0);
+           vec3 ks = vec3(0.0);
        }
 
        

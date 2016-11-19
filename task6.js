@@ -67,8 +67,8 @@ Task6.prototype.render = function(gl, w, h) {
 
     var projection = Matrix.perspective(60, w/h, 0.1, 100);
     var view =
-        Matrix.translate(0, 0, -5).multiply(
-        Matrix.rotate(this.cameraAngle, 1, 0, 0));
+        Matrix.translate(0, 0, 0).multiply(
+        Matrix.rotate(this.cameraAngle, 0, 1, 0));
     var rotation = Matrix.rotate(Date.now()/100, 0.2327, 1, 0);
     //var cubeModel = Matrix.translate(-3.8, 2, 0).multiply(rotation).multiply(Matrix.scale(0.3, 0.3, 0.3));
     // var sphere1 = Matrix.translate(-3.0, 1.5, 0).multiply(rotation).multiply(Matrix.scale(0.9, 0.9, 0.9));
@@ -77,13 +77,15 @@ Task6.prototype.render = function(gl, w, h) {
     // var sphere4 = Matrix.translate(-3.0, -1.5, 0).multiply(rotation).multiply(Matrix.scale(0.9, 0.9, 0.9));
     // var sphere5 = Matrix.translate(0, -1.5, 0).multiply(rotation).multiply(Matrix.scale(0.9, 0.9, 0.9));
     // var sphere6 = Matrix.translate(3.0, -1.5, 0).multiply(rotation).multiply(Matrix.scale(0.9, 0.9, 0.9));
+    var r = 4.0;
+    var pi = 3.141;
 
-    var sphere1 = Matrix.scale(0.9, 0.9, 0.9).multiply(Matrix.translate(-3.0, 1.5, 0).multiply(rotation));
-    var sphere2 = Matrix.scale(0.9, 0.9, 0.9).multiply(Matrix.translate(0, 1.5, 0).multiply(rotation));
-    var sphere3 = Matrix.scale(0.9, 0.9, 0.9).multiply(Matrix.translate(3.0, 1.5, 0).multiply(rotation));
-    var sphere4 = Matrix.scale(0.9, 0.9, 0.9).multiply(Matrix.translate(-3.0, -1.5, 0).multiply(rotation));
-    var sphere5 = Matrix.scale(0.9, 0.9, 0.9).multiply(Matrix.translate(0, -1.5, 0).multiply(rotation));
-    var sphere6 = Matrix.scale(0.9, 0.9, 0.9).multiply(Matrix.translate(3.0, -1.5, 0).multiply(rotation));
+    var sphere3 = Matrix.scale(0.9, 0.9, 0.9).multiply(Matrix.translate(r * Math.cos(0), 0, r* Math.sin(0)).multiply(rotation));
+    var sphere4 = Matrix.scale(0.9, 0.9, 0.9).multiply(Matrix.translate(r * Math.cos(pi/3.0), 0, r* Math.sin(pi/3,0)).multiply(rotation));
+    var sphere5 = Matrix.scale(0.9, 0.9, 0.9).multiply(Matrix.translate(r * Math.cos(2.0 *pi/3.0), 0, r* Math.sin(2.0*pi/3.0)).multiply(rotation));
+    var sphere6 = Matrix.scale(0.9, 0.9, 0.9).multiply(Matrix.translate(r * Math.cos(3.0*pi/3.0), 0, r* Math.sin(3.0*pi/3.0)).multiply(rotation));
+    var sphere1 = Matrix.scale(0.9, 0.9, 0.9).multiply(Matrix.translate(r * Math.cos(4.0*pi/3.0), 0, r* Math.sin(4.0*pi/3.0)).multiply(rotation));
+    var sphere2 = Matrix.scale(0.9, 0.9, 0.9).multiply(Matrix.translate(r * Math.cos(5.0*pi/3.0), 0, r* Math.sin(5.0*pi/3.0)).multiply(rotation));
     // var sphere2 = Matrix.translate(2.0, 0, 0).multiply(rotation).multiply(Matrix.scale(1.0, 1.0, 1.0));
 
 
@@ -103,5 +105,5 @@ Task6.prototype.render = function(gl, w, h) {
 }
 
 Task6.prototype.dragCamera = function(dy) {
-    this.cameraAngle = Math.min(Math.max(this.cameraAngle + dy*0.5, -90), 90);
+    this.cameraAngle = Math.min(Math.max(this.cameraAngle + dy*0.5, -360), 360);
 }
