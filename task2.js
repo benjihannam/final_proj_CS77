@@ -548,6 +548,7 @@ var ValueFragmentSource = `
            color = vec4(mix(dark_blue, light_blue, value * 2.0), 1.0);
            ks = vec3(0.17);
            
+           
 
        }
        else if (value < 0.51){
@@ -564,10 +565,12 @@ var ValueFragmentSource = `
                 color = vec4(0.86, 0.86, 0.86, 0.0);
             }
             }
+            ks = vec3(0.0);
 
        }
        else{
            color = vec4(0.86, 0.86, 0.86, 0.0);
+           ks = vec3(0.0);
        }
 
        //get the light vector and the eye vector

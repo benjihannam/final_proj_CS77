@@ -120,10 +120,15 @@ Task7.prototype.render = function(gl, w, h) {
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
+    var move_factor = Math.sin(Date.now()/4000);
+    var swing_factor = move_factor;
+    // if(move_factor > 0){
+    //     swing_factor = move_factor;
+    // }
     var projection = Matrix.perspective(60, w/h, 0.1, 100);
     var view =
-        Matrix.translate(0, 0, -30 + 15*Math.sin(Date.now()/1000)).multiply(
-        Matrix.rotate(this.cameraAngle, 0, 1, 0));
+        Matrix.translate(-15*swing_factor, 0, -30 + 15*move_factor).multiply(
+        Matrix.rotate(this.cameraAngle-swing_factor*50, 0, 1, 0));
     var rotation = Matrix.rotate(Date.now()/100, 0.2327, 1, 0);
     var sun_rotation = Matrix.rotate(Date.now()/100, -15, 0, 5);
 
