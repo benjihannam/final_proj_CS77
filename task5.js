@@ -7,7 +7,7 @@ var Task5 = function(gl) {
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
               new Uint8Array([0, 0, 255, 255]));
     var image2 = new Image();
-    image2.src = "lauren.png";
+    image2.src = "images/lauren.png";
     image2.addEventListener('load', function() {
         // Now that the image has loaded make copy it to the texture.
         gl.bindTexture(gl.TEXTURE_2D, laurenTexture);
@@ -20,7 +20,7 @@ var Task5 = function(gl) {
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
               new Uint8Array([0, 0, 255, 255]));
     var image3 = new Image();
-    image3.src = "benji.png";
+    image3.src = "images/benji.png";
     image3.addEventListener('load', function() {
         // Now that the image has loaded make copy it to the texture.
         gl.bindTexture(gl.TEXTURE_2D, benjiTexture);
@@ -33,7 +33,7 @@ var Task5 = function(gl) {
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
               new Uint8Array([0, 0, 255, 255]));
     var image4 = new Image();
-    image4.src = "sydni.png";
+    image4.src = "images/sydni.png";
     image4.addEventListener('load', function() {
         // Now that the image has loaded make copy it to the texture.
         gl.bindTexture(gl.TEXTURE_2D, sydniTexture);
@@ -46,7 +46,7 @@ var Task5 = function(gl) {
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
               new Uint8Array([0, 0, 255, 255]));
     var image5 = new Image();
-    image5.src = "sunsmile.png";
+    image5.src = "images/sunsmile.png";
     image5.addEventListener('load', function() {
         // Now that the image has loaded make copy it to the texture.
         gl.bindTexture(gl.TEXTURE_2D, sunTexture);

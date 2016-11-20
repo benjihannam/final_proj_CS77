@@ -6,7 +6,7 @@ var Task7 = function(gl) {
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
               new Uint8Array([0, 0, 255, 255]));
     var image = new Image();
-    image.src = "value1.png";
+    image.src = "images/value1.png";
     image.addEventListener('load', function() {
         // Now that the image has loaded make copy it to the texture.
         gl.bindTexture(gl.TEXTURE_2D, moonTexture);
@@ -19,7 +19,7 @@ var Task7 = function(gl) {
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
               new Uint8Array([0, 0, 255, 255]));
     var image2 = new Image();
-    image2.src = "sun.png";
+    image2.src = "images/sun.png";
     image2.addEventListener('load', function() {
         // Now that the image has loaded make copy it to the texture.
         gl.bindTexture(gl.TEXTURE_2D, sunTexture);
@@ -32,7 +32,7 @@ var Task7 = function(gl) {
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
               new Uint8Array([0, 0, 255, 255]));
     var image3 = new Image();
-    image3.src = "value1.png";
+    image3.src = "images/value1.png";
     image3.addEventListener('load', function() {
         // Now that the image has loaded make copy it to the texture.
         gl.bindTexture(gl.TEXTURE_2D, valueTexture);
@@ -45,7 +45,7 @@ var Task7 = function(gl) {
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
               new Uint8Array([0, 0, 255, 255]));
     var image4 = new Image();
-    image4.src = "mars.png";
+    image4.src = "images/mars.png";
     image4.addEventListener('load', function() {
         // Now that the image has loaded make copy it to the texture.
         gl.bindTexture(gl.TEXTURE_2D, marsTexture);
@@ -58,7 +58,7 @@ var Task7 = function(gl) {
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
               new Uint8Array([0, 0, 255, 255]));
     var image5 = new Image();
-    image5.src = "jupiter.png";
+    image5.src = "images/jupiter.png";
     image5.addEventListener('load', function() {
         // Now that the image has loaded make copy it to the texture.
         gl.bindTexture(gl.TEXTURE_2D, jupiterTexture);
@@ -71,7 +71,7 @@ var Task7 = function(gl) {
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
               new Uint8Array([0, 0, 255, 255]));
     var image6 = new Image();
-    image6.src = "mercury.png";
+    image6.src = "images/mercury.png";
     image6.addEventListener('load', function() {
         // Now that the image has loaded make copy it to the texture.
         gl.bindTexture(gl.TEXTURE_2D, mercuryTexture);
@@ -84,7 +84,7 @@ var Task7 = function(gl) {
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
               new Uint8Array([0, 0, 255, 255]));
     var image7 = new Image();
-    image7.src = "venus.png";
+    image7.src = "images/venus.png";
     image7.addEventListener('load', function() {
         // Now that the image has loaded make copy it to the texture.
         gl.bindTexture(gl.TEXTURE_2D, venusTexture);
@@ -98,7 +98,7 @@ var Task7 = function(gl) {
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
               new Uint8Array([0, 0, 255, 255]));
     var image8 = new Image();
-    image8.src = "space2.png";
+    image8.src = "images/space2.png";
     image8.addEventListener('load', function() {
         // Now that the image has loaded make copy it to the texture.
         gl.bindTexture(gl.TEXTURE_2D, starTexture);
@@ -112,36 +112,6 @@ var Task7 = function(gl) {
     this.starMesh = new MoonTriangleMesh(gl, starTexture, CubeTextureCoordinates, CubePositions, CubeNormals, CubeIndices, MoonVertexSource, MoonFragmentSource);
 
 
-    // var firstTexture = gl.createTexture();
-    // gl.bindTexture(gl.TEXTURE_2D, firstTexture);
-    // gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
-    //           new Uint8Array([0, 0, 255, 255]));
-    // var image1 = new Image();
-    // image1.src = "sun6.png";
-    // image1.addEventListener('load', function() {
-    //     // Now that the image has loaded make copy it to the texture.
-    //     gl.bindTexture(gl.TEXTURE_2D, firstTexture);
-    //     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image1);
-    //     gl.generateMipmap(gl.TEXTURE_2D);
-    //   });
-    //
-    // var secondTexture = gl.createTexture();
-    // gl.bindTexture(gl.TEXTURE_2D, secondTexture);
-    // gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
-    //           new Uint8Array([0, 0, 255, 255]));
-    // var image2 = new Image();
-    // image2.src = "sun5.png";
-    // image2.addEventListener('load', function() {
-    //     // Now that the image has loaded make copy it to the texture.
-    //     gl.bindTexture(gl.TEXTURE_2D, secondTexture);
-    //     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image2);
-    //     gl.generateMipmap(gl.TEXTURE_2D);
-    //   });
-    //
-    // textures.push(firstTexture);
-    // textures.push(secondTexture);
-
-
     this.moonTexture = moonTexture;
     this.sunTexture = sunTexture;
     this.valueTexture = valueTexture;
@@ -150,11 +120,6 @@ var Task7 = function(gl) {
     this.mercuryTexture = mercuryTexture;
     this.venusTexture = venusTexture;
 
-    // this.firstTexture = firstTexture;
-    // this.secondTexture = secondTexture;
-    //this.moonMesh = new MoonTriangleMesh(gl, moonTexture, TextureCoordinateData, TSpherePositions, TSphereNormals, TSphereIndices, MoonVertexSource, MoonFragmentSource);
-
-    //this.cubeMesh = new ShadedTriangleMesh(gl, CubePositions, CubeNormals, CubeIndices, SunVertexSource, SunFragmentSource);
 
     this.mesh1 = new ShadedTriangleMesh(gl, DTSpherePositions, DTSphereNormals, DTSphereIndices, SunVertexSource, SunFragmentSource);
     this.mesh2 = new MoonTriangleMesh(gl, moonTexture, TextureCoordinateData, TSpherePositions, TSphereNormals, TSphereIndices, MoonVertexSource, MoonFragmentSource);
@@ -163,8 +128,6 @@ var Task7 = function(gl) {
     this.mesh5 = new MoonTriangleMesh(gl, moonTexture, TextureCoordinateData, TSpherePositions, TSphereNormals, TSphereIndices, MoonVertexSource, MoonFragmentSource);
     this.mesh6 = new MoonTriangleMesh(gl, moonTexture, TextureCoordinateData, TSpherePositions, TSphereNormals, TSphereIndices, MoonVertexSource, MoonFragmentSource);
 
-
-    //this.doubleMesh = new DoubleTriangleMesh(gl, firstTexture, secondTexture, TextureCoordinateData, DTSpherePositions, DTSphereNormals, DTSphereIndices, DoubleVertexSource, DoubleFragmentSource);
 
     gl.enable(gl.DEPTH_TEST);
 }
@@ -204,20 +167,13 @@ Task7.prototype.render = function(gl, w, h) {
 
     this.starMesh.render(gl, starModel, view, projection, this.starTexture);
 
-    //this.sphereMesh.render(gl, sphereModel2, view, projection);
-    //this.earthMesh.render(gl, sphereModel, view, projection, this.earthTexture);
     this.mesh1.render(gl, sphere1, view, projection);
     this.mesh2.render(gl, sphere2, view, projection, this.mercuryTexture);
     this.mesh3.render(gl, sphere3, view, projection, this.venusTexture);
     this.mesh4.render(gl, sphere4, view, projection, this.valueTexture);
     this.mesh5.render(gl, sphere5, view, projection, this.marsTexture);
     this.mesh6.render(gl, sphere6, view, projection, this.jupiterTexture);
-    //this.cubeMesh.render(gl, cubeModel, view, projection);
-    //this.doubleMesh.render(gl, sphere1, view, projection, this.firstTexture, this.secondTexture);
-
-
-    //this.valueMesh.render(gl, sphereModel2, view, projection, this.valueTexture);
-
+    
 }
 
 Task7.prototype.dragCamera = function(dy) {

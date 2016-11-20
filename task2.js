@@ -599,19 +599,6 @@ var ValueFragmentSource = `
 `;
 
 
-/*
-// else {
-//     vec3 L_r = 10.0 * cos_a * incident_light;
-// }
-//vec3 L_r = 10.0 * cos_a * incident_light;
-
-// vec3 h = normalize(camera_loc) + normalize(l); //- globalPosition
-// float cosa = dot(normalize(h), normalize(norm));
-// cosa = max(0.0, cosa);
-// vec3 blinn = ks * incident_light * pow(cosa, n);
-
-// gl_FragColor = vec4(lambert + blinn + ka, 1.0);
-*/
 
 var ShadedTriangleMesh = function(gl, vertexPositions, vertexNormals, indices, vertexSource, fragmentSource) {
     this.indexCount = indices.length;
@@ -619,25 +606,9 @@ var ShadedTriangleMesh = function(gl, vertexPositions, vertexNormals, indices, v
     this.normalVbo = createVertexBuffer(gl, vertexNormals);
     this.indexIbo = createIndexBuffer(gl, indices);
     this.shaderProgram = createShaderProgram(gl, vertexSource, fragmentSource);
-    //this.worley = worley;
 }
 
 var dist_arr = function() {
-    // var lamb = 2.0;
-    // this.one = [, 0.5, 0.5, 1.0, 1.0, 1.0];
-    // this.two =
-    // this.one =[-0.5745871565615002, -0.4084689615220358, -0.7217118296666857, -0.42447192862999805, -0.27490409049330056, -0.6988167529011846];
-    // this.two = [-0.7914265242752359, -0.24846262520148943, 0.035948819198421855, -0.22618968316667298, -0.8132941094654598, 0.7295233995020323];
-    // this.one =[-0.9640896522719298, -0.9097148438368039, -0.8032141812621195, -0.9705694242833813, -0.9888746718850396, -0.9073597176823565];
-    // this.two = [-0.8724729586543694, -0.885750937293721, -0.7298040153532577, -0.9319334057643472, -0.8281796052171673, -0.7452288788387692, -0.9072995272208891, -0.9046140063785485, -0.5802759829858314, -0.8768411583559126, -0.9565052169546819, -0.6284903366770969];
-    // this.one =[-0.5745871565615002, -0.4084689615220358, -0.7217118296666857, -0.42447192862999805, -0.27490409049330056, -0.6988167529011846];
-    // this.two = [-0.7914265242752359, -0.24846262520148943, 0.035948819198421855, -0.22618968316667298, -0.8132941094654598, 0.7295233995020323, -0.8724729586543694, -0.885750937293721, -0.7298040153532577, -0.9319334057643472, -0.8281796052171673, -0.7452288788387692,];
-    // this.three = [-0.7596228403117371, 0.8944375730966678, -0.6385707336944945];
-    // this.four = [-0.11691756994171199, 0.10357936064121298, 0.03245094814916616];
-    // this.five = [0.42855879372839434, -0.05606648396727998, -0.6445312146619583, 0.9461477039400101, -0.13680199977352314, -0.5834516818827481];
-    // this.six = [0.1268629467939102, -0.38494594544096195, 0.08370690213858123, 0.6377961104464309, -0.5425334606789864, 0.277562097522809];
-    // this.seven = [0.16064851556694992, 0.18642257983121802, -0.4473447584025899, 0.9635974609590514, 0.1630041535872513, -0.42334881145695014];
-    // this.eight = [0.61616275336507, 0.45396874198860493, 0.5061566115267304, 0.48899263921972747, 0.925933888327334, 0.16228683392686793];
     this.one = [-1.1235910031740508, -0.22444316637167452, 0.3566069582262618, -0.28917284896465206, 0.9926489241762603, 0.6091200019317864, 0.8680214631025648, -0.39380497537126785, -0.7290105492831483, 0.3170127885384294, 0.9967439029740867, -0.5882214581151165, -0.06744707073615322, -0.0706473959988064, -1.196018326819326, -1.1881736057938967, -0.15899754931969534, -0.054435850365915896, -0.9592989490291151, 0.5939071363763566, -0.40868060848646964, -0.4054922500875415, -0.18437575515459678, -1.1142628128184637, -0.0067485769732957505, -0.043612492158724786, -1.1991882284431166];
 
     this.two =[-0.22649532902534694, -0.2532256823589181, -1.1509025239886999, -0.5158726499411777, -0.46017865244453304, 0.9808725793277131, 0.35416368514024876, 1.0649279221217065, 0.4248489199861793, 0.12400029011944042, 0.4431439203364921, -1.1082632331351154, 0.20159077846376586, 0.4283671182837706, 1.102661675225738, -0.37820057072880914, 0.135582851948422, 1.1307438341896607, 1.1338891703318772, -0.3036330300184311, -0.24920339581537385, -0.00966141397036573, 0.053660200919472954, 1.1987607100323963, -0.06576679186638522, 0.4109630783664408, 1.1255150275794554, 0.992745725888742, -0.46015654820382884, 0.49265796946235607];
@@ -691,10 +662,7 @@ var dist_arr = function() {
 }
 
 ShadedTriangleMesh.prototype.render = function(gl, model, view, projection) {
-    // TODO: Implement a render method to do Lambert- and Blinn-Phong Shading
-    //       This method will closely follow the render method in assignment 1.
-    //       However, this time you will need to setup two attributes (for vertex
-    //       position and vertex normal). You may also need to supply multiple uniforms.
+
     gl.useProgram(this.shaderProgram);
 
     var temp = view.multiply(model);
@@ -703,8 +671,7 @@ ShadedTriangleMesh.prototype.render = function(gl, model, view, projection) {
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indexIbo);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, this.positionVbo);
-    // gl.bindBuffer(gl.ARRAY_BUFFER, this.worley);
-    // var w = gl.getUniformLocation(this.shaderProgram, "worley");
+
 
     var positionLoc = gl.getAttribLocation(this.shaderProgram, "Position");
     gl.enableVertexAttribArray(positionLoc);
@@ -716,46 +683,11 @@ ShadedTriangleMesh.prototype.render = function(gl, model, view, projection) {
     gl.enableVertexAttribArray(normalLoc);
     gl.vertexAttribPointer(normalLoc, 3, gl.FLOAT, false, 0, 0);
 
-    // // var time = gl.getUniformLocation(this.shaderProgram, "time");
-    // // gl.uniform1i(time, Date.now());
-    // var time = gl.getAttribLocation(this.shaderProgram, "time");
-    // // gl.uniform1f(time, Date.now());
-    // // var fl = Date.now();
-    // gl.enableVertexAttribArray(time);
-    // gl.vertexAttribPointer(fl, 1, gl.FLOAT, false, 0, 0);
-
     var f = new dist_arr();
-    //console.log(f.lamb);
-    // if (Math.sin(0.01*Date.now()) > 0) {
-    //     //console.log("here");
-    //     var t = gl.getUniformLocation(this.shaderProgram, "two");
-    //     gl.uniform3fv(t, f.two);
-    //     var fo = gl.getUniformLocation(this.shaderProgram, "four");
-    //     gl.uniform3fv(fo, f.four);
-    // }
-    // else {
-    //     //console.log("there");
-    //     var t2 = gl.getUniformLocation(this.shaderProgram, "four");
-    //     gl.uniform3fv(t2, f.two);
-    //     var fo2 = gl.getUniformLocation(this.shaderProgram, "two");
-    //     gl.uniform3fv(fo2, f.four);
-    // }
+
     var o = gl.getUniformLocation(this.shaderProgram, "one");
     gl.uniform3fv(o, f.one);
-    // // var t = gl.getUniformLocation(this.shaderProgram, "two");
-    // // gl.uniform3fv(t, f.two);
-    // if (Math.sin(0.01*Date.now()) > 0) {
-    //     var th = gl.getUniformLocation(this.shaderProgram, "three");
-    //     gl.uniform3fv(th, f.three);
-    //     var se = gl.getUniformLocation(this.shaderProgram, "seven");
-    //     gl.uniform3fv(se, f.seven);
-    // }
-    // else {
-    //     var th = gl.getUniformLocation(this.shaderProgram, "seven");
-    //     gl.uniform3fv(th, f.three);
-    //     var se = gl.getUniformLocation(this.shaderProgram, "three");
-    //     gl.uniform3fv(se, f.seven);
-    // }
+
     var t = gl.getUniformLocation(this.shaderProgram, "two");
     gl.uniform3fv(t, f.two);
     var th = gl.getUniformLocation(this.shaderProgram, "three");
@@ -842,10 +774,7 @@ var MoonTriangleMesh = function(gl, textureim, texturebuf, vertexPositions, vert
 }
 
 MoonTriangleMesh.prototype.render = function(gl, model, view, projection, tex) {
-    // TODO: Implement a render method to do Lambert- and Blinn-Phong Shading
-    //       This method will closely follow the render method in assignment 1.
-    //       However, this time you will need to setup two attributes (for vertex
-    //       position and vertex normal). You may also need to supply multiple uniforms.
+
     gl.useProgram(this.shaderProgram);
 
     var temp = view.multiply(model);
@@ -906,25 +835,12 @@ var Task2 = function(gl) {
     this.cameraAngle = 0;
     this.sphereMesh = new ShadedTriangleMesh(gl, SpherePositions, SphereNormals, SphereIndices, PhongVertexSource, PhongFragmentSource);
 
-    var moonTexture = gl.createTexture();
-    gl.bindTexture(gl.TEXTURE_2D, moonTexture);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
-              new Uint8Array([0, 0, 255, 255]));
-    var image = new Image();
-    image.src = "moon.gif";
-    image.addEventListener('load', function() {
-        // Now that the image has loaded make copy it to the texture.
-        gl.bindTexture(gl.TEXTURE_2D, moonTexture);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image);
-        gl.generateMipmap(gl.TEXTURE_2D);
-      });
-
     var valueTexture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, valueTexture);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
               new Uint8Array([0, 0, 255, 255]));
     var image3 = new Image();
-    image3.src = "value1.png";
+    image3.src = "images/value1.png";
     image3.addEventListener('load', function() {
         // Now that the image has loaded make copy it to the texture.
         gl.bindTexture(gl.TEXTURE_2D, valueTexture);
@@ -937,7 +853,7 @@ var Task2 = function(gl) {
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
               new Uint8Array([0, 0, 255, 255]));
     var image2 = new Image();
-    image2.src = "earthnasa.png";
+    image2.src = "images/earthnasa.png";
     image2.addEventListener('load', function() {
         // Now that the image has loaded make copy it to the texture.
         gl.bindTexture(gl.TEXTURE_2D, earthTexture);
@@ -945,7 +861,6 @@ var Task2 = function(gl) {
         gl.generateMipmap(gl.TEXTURE_2D);
       });
 
-    this.moonTexture = moonTexture;
     this.earthTexture = earthTexture;
     this.valueTexture = valueTexture;
 

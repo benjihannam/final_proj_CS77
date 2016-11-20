@@ -46,25 +46,6 @@ var DoubleFragmentSource = `
 
     void main() {
 
-      // vec4 color0 = texture2D(uSampler, vTextureCoord);
-      // vec4 color1 = texture2D(uSampler2, vTextureCoord);
-      // if (random < 0.2) {
-      //   gl_FragColor = color0 * color1 - 0.1*sin(time/158.0);
-      //
-      // } else if (random < 0.4) {
-      //   gl_FragColor = color0 * color1 + 0.1*sin(time/158.0);
-      // } else if (random < 0.6) {
-      //   gl_FragColor = color0 * color1 + 0.2*sin(time/158.0);
-      //
-      // } else if (random < 0.8) {
-      //   gl_FragColor = color0 * color1 - 0.2*sin(time/158.0);
-      //
-      // } else {
-      //   gl_FragColor = color0 * color1 + 0.3*sin(time/158.0);
-      //
-      // }
-      // //gl_FragColor = color0 * color1 + 0.1*sin(time/158.0);
-
 
       vec4 color0 = texture2D(uSampler2, vTextureCoord);
 
@@ -81,9 +62,6 @@ var DoubleFragmentSource = `
 
       vec4 temp = color1 * ( vec4( p, p, p, p ) * 2.0 ) + ( color1 * color1 - 0.1 );
 
-      // if( temp.r > 1.0 ){ temp.bg += clamp( temp.r - 2.0, 0.0, 100.0 ); }
-      // if( temp.g > 1.0 ){ temp.rb += temp.g - 1.0; }
-      // if( temp.b > 1.0 ){ temp.rg += temp.b - 1.0; }
       gl_FragColor = temp;
 
 
@@ -100,16 +78,12 @@ var DoubleTriangleMesh = function(gl, textureim, textureim2, texturebuf, vertexP
     this.moonVertexTextureCoordBuffer = createTextureBuffer(gl, texturebuf);
     this.moonVertexTextureCoordBuffer2 = createTextureBuffer(gl, texturebuf);
     this.texture = textureim;
-    //this.texture2 = textureim2;
 
     this.shaderProgram = createShaderProgram(gl, vertexSource, fragmentSource);
 }
 
 DoubleTriangleMesh.prototype.render = function(gl, model, view, projection, tex1, tex2) {
-    // TODO: Implement a render method to do Lambert- and Blinn-Phong Shading
-    //       This method will closely follow the render method in assignment 1.
-    //       However, this time you will need to setup two attributes (for vertex
-    //       position and vertex normal). You may also need to supply multiple uniforms.
+
     gl.useProgram(this.shaderProgram);
 
     var temp = view.multiply(model);
@@ -152,10 +126,6 @@ DoubleTriangleMesh.prototype.render = function(gl, model, view, projection, tex1
     gl.vertexAttribPointer(texture, 2, gl.FLOAT, false, 0, 0);
 
 
-    // var texture2 = gl.getAttribLocation(this.shaderProgram, "aTextureCoord");
-    // gl.enableVertexAttribArray(texture2);
-    // gl.vertexAttribPointer(texture2, 2, gl.FLOAT, false, 0, 0);
-
     var samplerUniform = gl.getUniformLocation(this.shaderProgram, "uSampler");
     var samplerUniform2 = gl.getUniformLocation(this.shaderProgram, "uSampler2");
     gl.uniform1i(samplerUniform, 0);  // texture unit 0
@@ -164,14 +134,8 @@ DoubleTriangleMesh.prototype.render = function(gl, model, view, projection, tex1
     gl.bindTexture(gl.TEXTURE_2D, textures[0]);
 
 
-
     gl.activeTexture(gl.TEXTURE1);
     gl.bindTexture(gl.TEXTURE_2D, textures[1]);
-
-
-
-    //gl.bindBuffer(gl.ARRAY_BUFFER, this.moonVertexTextureCoordBuffer2);
-
 
 
     var time = gl.getUniformLocation(this.shaderProgram, "time");
@@ -196,32 +160,13 @@ var textures = [];
 var Task3 = function(gl) {
     this.cameraAngle = 0;
 
-    var starTexture = gl.createTexture();
-  gl.bindTexture(gl.TEXTURE_2D, starTexture);
-  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
-            new Uint8Array([0, 0, 255, 255]));
-  var image = new Image();
-  image.src = "space2.png";
-  image.addEventListener('load', function() {
-      // Now that the image has loaded make copy it to the texture.
-      gl.bindTexture(gl.TEXTURE_2D, starTexture);
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA,gl.UNSIGNED_BYTE, image);
-      gl.generateMipmap(gl.TEXTURE_2D);
-    });
-
-
-this.starTexture = starTexture;
-
-
-this.starMesh = new MoonTriangleMesh(gl, starTexture, CubeTextureCoordinates, CubePositions, CubeNormals, CubeIndices, MoonVertexSource, MoonFragmentSource);
-
 
     var firstTexture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, firstTexture);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
               new Uint8Array([0, 0, 255, 255]));
     var image1 = new Image();
-    image1.src = "sun6.png";
+    image1.src = "images/sun6.png";
     image1.addEventListener('load', function() {
         // Now that the image has loaded make copy it to the texture.
         gl.bindTexture(gl.TEXTURE_2D, firstTexture);
@@ -234,7 +179,7 @@ this.starMesh = new MoonTriangleMesh(gl, starTexture, CubeTextureCoordinates, Cu
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
               new Uint8Array([0, 0, 255, 255]));
     var image2 = new Image();
-    image2.src = "sun5.png";
+    image2.src = "images/sun5.png";
     image2.addEventListener('load', function() {
         // Now that the image has loaded make copy it to the texture.
         gl.bindTexture(gl.TEXTURE_2D, secondTexture);
@@ -285,9 +230,6 @@ Task3.prototype.render = function(gl, w, h) {
     var model3 = Matrix.translate(0, 0, 0).multiply(rotation).multiply(
         Matrix.scale(2, 2, 2));
 
-    //this.firstMesh.render(gl, model1, view, projection, this.firstTexture);
-    //this.secondMesh.render(gl, model2, view, projection, this.secondTexture);
-    //this.sphereMesh.render(gl, sunModel, view, projection);
     this.doubleMesh.render(gl, model3, view, projection, this.firstTexture, this.secondTexture);
 
     //this.cubeMesh.render(gl, cubeModel, view, projection);
