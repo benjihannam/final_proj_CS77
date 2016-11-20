@@ -23,6 +23,12 @@ Worley Noise: used the actual paper from Worley to implement. Used the python fi
 
 Worley Animation: Pass Date.getSeconds + Date.getMilliseconds/1000.0 as a uniform into the FragShader and influence the feature points by adding / subtracting sines and cosines of the time that has been passed in.
 
+## How to Run our Program!
+- clone the repo
+- if using Chrome, run a local server
+- open the HTML file
+- enjoy!
+
 ## CS77 Acknowledgments
 
 Thank you to the TAs and professor for all of your help and hard work!
