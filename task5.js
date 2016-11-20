@@ -104,10 +104,7 @@ Task5.prototype.render = function(gl, w, h) {
     this.laurenMesh.render(gl, moonModel, view, projection, this.laurenTexture);
     this.sydniMesh.render(gl, earthModel, view, projection, this.sydniTexture);
     this.sunMesh.render(gl, sunModel, view, projection, this.sunTexture);
-
     this.benjiMesh.render(gl, cubeModel, view, projection, this.benjiTexture);
-
-    //this.cubeStarMesh.render(gl, starModel, view, projection, this.starTexture);
 }
 
 Task5.prototype.dragCamera = function(dy) {

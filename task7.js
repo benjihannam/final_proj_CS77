@@ -173,7 +173,7 @@ Task7.prototype.render = function(gl, w, h) {
     this.mesh4.render(gl, sphere4, view, projection, this.valueTexture);
     this.mesh5.render(gl, sphere5, view, projection, this.marsTexture);
     this.mesh6.render(gl, sphere6, view, projection, this.jupiterTexture);
-    
+
 }
 
 Task7.prototype.dragCamera = function(dy) {

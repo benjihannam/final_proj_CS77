@@ -22,20 +22,12 @@ var WhiteFragmentSource = `
 `;
 
 function createVertexBuffer(gl, vertexData) {
-    // TODO: Create a buffer, bind it to the ARRAY_BUFFER target, and
-    //       copy the array `vertexData` into it
-    //       Return the created buffer
-    //       Commands you will need: gl.createBuffer, gl.bindBuffer, gl.bufferData
     var vertbuf = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vertbuf);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexData), gl.STATIC_DRAW);
     return vertbuf;
 }
 function createIndexBuffer(gl, indexData) {
-    // TODO: Create a buffer, bind it to the ELEMENT_ARRAY_BUFFER target, and
-    //       copy the array `indexData` into it
-    //       Return the created buffer
-    //       Commands you will need: gl.createBuffer, gl.bindBuffer, gl.bufferData
     var indbuf = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indbuf);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indexData), gl.STATIC_DRAW);
@@ -43,7 +35,6 @@ function createIndexBuffer(gl, indexData) {
 }
 
 function createTextureBuffer(gl, textureData) {
-
     var texbuf = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, texbuf);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureData), gl.STATIC_DRAW);
@@ -51,9 +42,6 @@ function createTextureBuffer(gl, textureData) {
 }
 
 function createShaderObject(gl, shaderSource, shaderType) {
-    // TODO: Create a shader of type `shaderType`, submit the source code `shaderSource`,
-    //       compile it and return the shader
-    //       Commands you will need: gl.createShader, gl.shaderSource, gl.compileShader
     var fragShader = gl.createShader(shaderType);
     gl.shaderSource(fragShader, shaderSource);
     gl.compileShader(fragShader);
@@ -64,9 +52,6 @@ function createShaderProgram(gl, vertexSource, fragmentSource) {
     var vertexShader = createShaderObject(gl, vertexSource, gl.VERTEX_SHADER);
     var fragmentShader = createShaderObject(gl, fragmentSource, gl.FRAGMENT_SHADER);
 
-    // TODO: Create a shader program, attach `vertexShader` and `fragmentShader`
-    //       to it, link the program and return the result.
-    //       Commands you will need: gl.createProgram, gl.attachShader, gl.linkProgram
     var shader = gl.createProgram();
     gl.attachShader(shader, vertexShader);
     gl.attachShader(shader, fragmentShader);
@@ -83,11 +68,6 @@ function createShaderProgram(gl, vertexSource, fragmentSource) {
 }
 
 function rotateAroundAxisAtPoint(axis, angle, point) {
-    // TODO: Build a transformation matrix that rotates around a given axis
-    //       by the given angle at the given point.
-    //       Hint: You will need Matrix.translate and Matrix.rotate
-    //       Hint: axis and point are arrays. Use axis[0], axis[1], etc.
-    //             to get their components
 
     var res1 = (Matrix.translate(point[0], point[1], point[2])).inverse();
     var res2 = Matrix.rotate(angle, axis[0], axis[1], axis[2]);
@@ -103,26 +83,6 @@ var TriangleMesh = function(gl, vertexPositions, indices, vertexSource, fragment
 }
 
 TriangleMesh.prototype.render = function(gl, model, view, projection) {
-    // TODO:
-    //      1) Make a model-view-projection matrix from the specified matrices
-    //      2) Bind the shader program
-    //      3) Bind the vertex- and index buffers
-    //      4) Setup the shader data
-    //         Hint: You will need one uniform (for the model-view-projection matrix)
-    //               and one attribute (for the vertex position)
-    //      5) Draw the geometry
-    //
-    //       Commands you will need: gl.useProgram, gl.uniformMatrix4fv, gl.getUniformLocation,
-    //                               gl.bindBuffer, gl.getAttribLocation, gl.enableVertexAttribArray,
-    //                               gl.vertexAttribPointer, gl.drawElements
-
-    // IMPORTANT HINT:
-    //      OpenGL expects Matrix in column-major order, but matrix.js stores them in row-major order
-    //      To solve this, you need to transpose the matrix before passing it to OpenGL
-    //      Example:
-    //          var matrix = ....
-    //          var uniformLocation = ....
-    //          gl.uniformMatrix4fv(uniformLocation, false, matrix.transpose().m);
 
     gl.useProgram(this.shaderProgram);
     var matrix = (projection.multiply(view)).multiply(model);
